@@ -21,10 +21,10 @@ jobs:
           dotnet-version: "8.0.x"
 
       - name: Restore
-        run: dotnet restore School.sln
+        run: dotnet restore School_Backend.sln
 
       - name: Build
-        run: dotnet build School.sln --configuration Release --no-restore
+        run: dotnet build School_Backend.sln --configuration Release --no-restore
 
       - name: Test
-        run: dotnet test School.sln --configuration Release --no-build
+        run: dotnet test School_Backend.sln --configuration Release --no-build
