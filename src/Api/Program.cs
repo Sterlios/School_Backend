@@ -1,10 +1,10 @@
-using School.Domain.Extensions;
+using School.Application.Extensions;
 using School.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
-builder.Services.AddDomain();
+builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
 
 if (!builder.Environment.IsEnvironment("master"))
