@@ -2,21 +2,21 @@
 
 public class User
 {
-    private readonly int _id;
-    private readonly FullName _name;
-    private readonly Email _email;
-    private readonly string _passwordHash;
-    private readonly GlobalRoles _role;
-    private readonly UserStatuses _status;
-
     private User(FullName name, Email email, string passwordHash)
     {
-        _name = name;
-        _email = email;
-        _passwordHash = passwordHash;
-        _role = GlobalRoles.User;
-        _status = UserStatuses.Active;
+        Name = name;
+        Email = email;
+        PasswordHash = passwordHash;
+        Role = GlobalRoles.User;
+        Status = UserStatuses.Active;
     }
+
+    public int Id { get; private set; }
+    public FullName Name { get; private set; }
+    public Email Email { get; private set; }
+    public string PasswordHash { get; private set; }
+    public GlobalRoles Role { get; private set; }
+    public UserStatuses Status { get; private set; }
 
     public static User Register(FullName name, Email email, string passwordHash)
     {
