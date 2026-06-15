@@ -1,26 +1,49 @@
-﻿using School.Domain.Models.Users;
+﻿using FluentAssertions;
+using School.Domain.Models.Users;
 
 namespace Domain.Tests.Users;
 
 public class UserTests
 {
     [Fact]
-    public void Register_ShouldCreateUser_WhenValidParametersAreProvided()
+    public void Register_Should_CreateUser_WhenValidParametersAreProvided()
     {
-        var name = FullName.Create("John", "Doe");
-        var email = Email.Create("John@gmail.com");
-
-        var user = User.Register(name, email, "password");
+        var user = Create();
 
         Assert.True(user != null && user.Status == UserStatuses.Active && user.Role == GlobalRoles.User);
     }
 
     [Fact]
-    public void Block_ShouldChangeStatusToBlocked_WhenUserIsActive()
+    public void Register_Should_ThrowException_WhenNameIsNull()
     {
-        var name = FullName.Create("John", "Doe");
-        var email = Email.Create("John@gmail.com");
-        var user = User.Register(name, email, "password");
+        Action act = () => User.Register(null!, Email.Create("Anton@gmail.com"), "password");
+
+        act.Should().Throw();
+    }
+
+    [Fact]
+    public void Register_Should_ThrowException_WhenEmailIsNull()
+    {
+        Action act = () => User.Register(FullName.Create("Anton", "Kuzmin"), null, "password");
+
+        act.Should().Throw();
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    public void Register_Should_ThrowException_WhenPasswordIsNullOrEmptyOrWhiteSpace(string password)
+    {
+        Action act = () => User.Register(FullName.Create("Anton", "Kuzmin"), Email.Create("Anton@gmail.com"), password);
+
+        act.Should().Throw();
+    }
+
+    [Fact]
+    public void Block_Should_ChangeStatusToBlocked_WhenUserIsActive()
+    {
+        var user = Create();
 
         user.Block();
 
@@ -28,16 +51,97 @@ public class UserTests
     }
 
     [Fact]
-    public void Unblock_ShouldChangeStatusToActive_WhenUserIsBlocked()
+    public void Block_Should_ThrowException_WhenUserIsAlreadyBlocked()
     {
-        var name = FullName.Create("John", "Doe");
-        var email = Email.Create("John@gmail.com");
-        var user = User.Register(name, email, "password");
+        var user = Create();
+
+        user.Block();
+
+        Action act = user.Block;
+
+        act.Should().Throw();
+    }
+
+    [Fact]
+    public void Unblock_Should_ChangeStatusToActive_WhenUserIsBlocked()
+    {
+        var user = Create();
 
         user.Block();
 
         user.Unblock();
 
         Assert.Equal(UserStatuses.Active, user.Status);
+    }
+
+    [Fact]
+    public void Unblock_Should_ThrowException_WhenUserIsAlreadyActive()
+    {
+        var user = Create();
+
+        Action act = user.Unblock;
+
+        act.Should().Throw();
+    }
+
+    [Fact]
+    public void ChangeRoleToAdmin_Should_ChangeRole_WhenUserIsUser()
+    {
+        var user = Create();
+
+        user.ChangeRole(GlobalRoles.Admin);
+
+        Assert.Equal(GlobalRoles.Admin, user.Role);
+    }
+
+    [Fact]
+    public void ChangeRoleToUser_Should_ThrowException_WhenUserIsUser()
+    {
+        var user = Create();
+
+        Action act = () => user.ChangeRole(GlobalRoles.User);
+
+        act.Should().Throw();
+    }
+
+    [Fact]
+    public void ChangePassword_Should_Change_WhenNewPasswordIsOk()
+    {
+        var user = Create();
+
+        user.ChangePassword("newPassword");
+
+        Assert.Equal("newPassword", user.PasswordHash);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    public void ChangePassword_Should_ThrowException_WhenNewPasswordIsNullOrEmptyOrWhiteSpace(string password)
+    {
+        var user = Create();
+
+        Action act = () => user.ChangePassword(password);
+
+        act.Should().Throw();
+    }
+
+    [Fact]
+    public void ChangePassword_Should_ThrowException_WhenNewPasswordEqualOldPassword()
+    {
+        var user = Create();
+
+        Action act = () => user.ChangePassword(user.PasswordHash);
+
+        act.Should().Throw();
+    }
+
+    private User Create()
+    {
+        var name = FullName.Create("Anton", "Kuzmin");
+        var email = Email.Create("Anton@gmail.com");
+
+        return User.Register(name, email, "password");
     }
 }
