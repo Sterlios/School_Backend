@@ -31,4 +31,39 @@ public class User
 
         return new User(name, email, passwordHash);
     }
+
+    public void Block()
+    {
+        if (Status == UserStatuses.Blocked)
+            throw new InvalidOperationException($"Пользователь уже заблокирован.");
+
+        Status = UserStatuses.Blocked;
+    }
+
+    public void Unblock()
+    {
+        if (Status == UserStatuses.Active)
+            throw new InvalidOperationException($"Пользователь уже активен.");
+
+        Status = UserStatuses.Active;
+    }
+
+    public void ChangeRole(GlobalRoles newRole)
+    {
+        if (Role == newRole)
+            throw new InvalidOperationException($"Пользователь уже имеет роль {newRole}.");
+
+        Role = newRole;
+    }
+
+    public void ChangePassword(string passwordHash)
+    {
+        if (string.IsNullOrWhiteSpace(passwordHash))
+            throw new ArgumentNullException(nameof(passwordHash), $"В {nameof(User)} поступил пустой {nameof(passwordHash)}");
+
+        if (PasswordHash == passwordHash)
+            throw new InvalidOperationException($"Новый пароль не может быть таким же, как текущий.");
+
+        PasswordHash = passwordHash;
+    }
 }
