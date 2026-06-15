@@ -1,6 +1,6 @@
 ﻿namespace School.Domain.Models.Users;
 
-public class User
+public class User //TODO: Create Custom Exceptions for User domain
 {
     private User(FullName name, Email email, string passwordHash)
     {

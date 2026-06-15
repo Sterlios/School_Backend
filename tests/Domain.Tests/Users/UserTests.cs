@@ -10,7 +10,9 @@ public class UserTests
     {
         var user = Create();
 
-        Assert.True(user != null && user.Status == UserStatuses.Active && user.Role == GlobalRoles.User);
+        user.Should().NotBeNull();
+        user.Status.Should().Be(UserStatuses.Active);
+        user.Role.Should().Be(GlobalRoles.User);
     }
 
     [Fact]
@@ -47,7 +49,7 @@ public class UserTests
 
         user.Block();
 
-        Assert.Equal(UserStatuses.Blocked, user.Status);
+        user.Status.Should().Be(UserStatuses.Blocked);
     }
 
     [Fact]
@@ -71,7 +73,7 @@ public class UserTests
 
         user.Unblock();
 
-        Assert.Equal(UserStatuses.Active, user.Status);
+        user.Status.Should().Be(UserStatuses.Active);
     }
 
     [Fact]
@@ -91,7 +93,7 @@ public class UserTests
 
         user.ChangeRole(GlobalRoles.Admin);
 
-        Assert.Equal(GlobalRoles.Admin, user.Role);
+        user.Role.Should().Be(GlobalRoles.Admin);
     }
 
     [Fact]
@@ -111,7 +113,7 @@ public class UserTests
 
         user.ChangePassword("newPassword");
 
-        Assert.Equal("newPassword", user.PasswordHash);
+        user.PasswordHash.Should().Be("newPassword");
     }
 
     [Theory]
