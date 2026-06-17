@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using School.Domain.Models.Users;
+using School.Domain.Users;
 
 namespace Domain.Tests.Users;
 
