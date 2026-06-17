@@ -1,4 +1,4 @@
-﻿namespace School.Domain.Models.Users;
+﻿namespace School.Domain.Users;
 
 public class User //TODO: Create Custom Exceptions for User domain
 {
@@ -11,7 +11,7 @@ public class User //TODO: Create Custom Exceptions for User domain
         Status = UserStatuses.Active;
     }
 
-    public int Id { get; private set; }
+    public UserId Id { get; private set; }
     public FullName Name { get; private set; }
     public Email Email { get; private set; }
     public string PasswordHash { get; private set; }
@@ -21,13 +21,13 @@ public class User //TODO: Create Custom Exceptions for User domain
     public static User Register(FullName name, Email email, string passwordHash)
     {
         if (name is null)
-            throw new ArgumentNullException(nameof(name), $"В {nameof(User)} поступил null вместо {nameof(name)}");
+            throw new ArgumentNullException(nameof(name), $"Поступил null вместо {nameof(name)}");
 
         if (email is null)
-            throw new ArgumentNullException(nameof(email), $"В {nameof(User)} поступил null вместо {nameof(email)}");
+            throw new ArgumentNullException(nameof(email), $"Поступил null вместо {nameof(email)}");
 
         if (string.IsNullOrWhiteSpace(passwordHash))
-            throw new ArgumentNullException(nameof(passwordHash), $"В {nameof(User)} поступил пустой {nameof(passwordHash)}");
+            throw new ArgumentNullException(nameof(passwordHash), $"Поступил пустой {nameof(passwordHash)}");
 
         return new User(name, email, passwordHash);
     }
@@ -51,7 +51,7 @@ public class User //TODO: Create Custom Exceptions for User domain
     public void ChangeRole(GlobalRoles newRole)
     {
         if (Role == newRole)
-            throw new InvalidOperationException($"Пользователь уже имеет роль {newRole}.");
+            throw new InvalidOperationException($"Не удалось изменить роль у пользователя.");
 
         Role = newRole;
     }
@@ -59,10 +59,10 @@ public class User //TODO: Create Custom Exceptions for User domain
     public void ChangePassword(string passwordHash)
     {
         if (string.IsNullOrWhiteSpace(passwordHash))
-            throw new ArgumentNullException(nameof(passwordHash), $"В {nameof(User)} поступил пустой {nameof(passwordHash)}");
+            throw new ArgumentNullException(nameof(passwordHash), $"Поступил пустой {nameof(passwordHash)}. Пользователь {Id}.");
 
         if (PasswordHash == passwordHash)
-            throw new InvalidOperationException($"Новый пароль не может быть таким же, как текущий.");
+            throw new InvalidOperationException($"Новый пароль не должен совпадать с текущим.");
 
         PasswordHash = passwordHash;
     }

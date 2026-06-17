@@ -1,7 +1,7 @@
 ﻿using School.Domain.Exceptions;
 using System.Text.RegularExpressions;
 
-namespace School.Domain.Models.Users;
+namespace School.Domain.Users;
 
 public class Email
 {

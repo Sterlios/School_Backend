@@ -1,4 +1,4 @@
-﻿namespace School.Domain.Models.Users;
+﻿namespace School.Domain.Users;
 
 public enum UserStatuses
 {
