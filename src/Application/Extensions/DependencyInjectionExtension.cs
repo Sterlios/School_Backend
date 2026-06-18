@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace School.Domain.Extensions;
+namespace School.Application.Extensions;
 
 public static class DependencyInjectionExtension
 {
-    public static IServiceCollection AddDomain(this IServiceCollection services)
+    public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         return services;
     }
