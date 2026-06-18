@@ -39,6 +39,7 @@ public class EmailTests
     [Theory]
     [InlineData("anton")]
     [InlineData("anton@")]
+    [InlineData("anton@Kuzmin")]
     [InlineData("@gmail.com")]
     [InlineData("anton.gmail.com")]
     [InlineData("anton@@gmail.com")]
