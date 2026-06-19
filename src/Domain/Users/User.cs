@@ -20,14 +20,9 @@ public class User //TODO: Create Custom Exceptions for User domain
 
     public static User Register(FullName name, Email email, string passwordHash)
     {
-        if (name is null)
-            throw new ArgumentNullException(nameof(name), $"Поступил null вместо {nameof(name)}");
-
-        if (email is null)
-            throw new ArgumentNullException(nameof(email), $"Поступил null вместо {nameof(email)}");
-
-        if (string.IsNullOrWhiteSpace(passwordHash))
-            throw new ArgumentNullException(nameof(passwordHash), $"Поступил пустой {nameof(passwordHash)}");
+        ArgumentNullException.ThrowIfNull(name, nameof(name));
+        ArgumentNullException.ThrowIfNull(email, nameof(email));
+        ArgumentException.ThrowIfNullOrWhiteSpace(passwordHash, nameof(passwordHash));
 
         return new User(name, email, passwordHash);
     }
@@ -58,8 +53,7 @@ public class User //TODO: Create Custom Exceptions for User domain
 
     public void ChangePassword(string passwordHash)
     {
-        if (string.IsNullOrWhiteSpace(passwordHash))
-            throw new ArgumentNullException(nameof(passwordHash), $"Поступил пустой {nameof(passwordHash)}. Пользователь {Id}.");
+        ArgumentException.ThrowIfNullOrWhiteSpace(passwordHash, nameof(passwordHash));
 
         if (PasswordHash == passwordHash)
             throw new InvalidOperationException($"Новый пароль не должен совпадать с текущим.");
