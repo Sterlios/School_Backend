@@ -7,7 +7,7 @@ public class Course
     private readonly List<Module> _modules = new();
     private readonly List<CourseMember> _members = new();
 
-    public CourseId Id { get; private set; }
+    public CourseId Id { get; }
     public string Name { get; private set; }
     public string Description { get; private set; }
     public bool IsPublished { get; private set; }

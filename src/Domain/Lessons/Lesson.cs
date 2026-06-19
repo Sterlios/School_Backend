@@ -2,7 +2,7 @@
 
 public class Lesson
 {
-    public LessonId Id { get; init; }
+    public LessonId Id { get; }
     public string Title { get; private set; }
     public string Description { get; private set; }
 

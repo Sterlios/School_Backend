@@ -6,7 +6,7 @@ public class Module
 {
     private readonly List<Lesson> _lessons = new();
 
-    public ModuleId Id { get; init; }
+    public ModuleId Id { get; }
     public string Name { get; private set; }
     public string Description { get; private set; }
     public bool IsPublished { get; private set; }
