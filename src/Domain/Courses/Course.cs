@@ -1,4 +1,5 @@
-﻿using School.Domain.Modules;
+﻿using School.Domain.Common;
+using School.Domain.Modules;
 
 namespace School.Domain.Courses;
 
@@ -8,7 +9,7 @@ public class Course
     private readonly List<CourseMember> _members = new();
 
     public CourseId Id { get; }
-    public string Name { get; private set; }
+    public string Title { get; private set; }
     public string Description { get; private set; }
     public Status Status { get; private set; }
 

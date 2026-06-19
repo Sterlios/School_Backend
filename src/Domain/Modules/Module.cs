@@ -8,7 +8,7 @@ public class Module
     private readonly List<Lesson> _lessons = new();
 
     public ModuleId Id { get; }
-    public string Name { get; private set; }
+    public string Title { get; private set; }
     public string Description { get; private set; }
     public Status Status { get; private set; }
 
