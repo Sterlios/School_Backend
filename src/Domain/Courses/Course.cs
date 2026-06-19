@@ -10,17 +10,38 @@ public class Course
     public CourseId Id { get; }
     public string Name { get; private set; }
     public string Description { get; private set; }
-    public bool IsPublished { get; private set; }
+    public Status Status { get; private set; }
+
+    private Course(string title, string description)
+    {
+        Title = title;
+        Description = description;
+        Status = Status.Draft;
+    }
+
+    public static Course Create(string title, string description)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(title);
+        ArgumentException.ThrowIfNullOrWhiteSpace(description);
+
+        return new Course(title, description);
+    }
 
     public void Publish()
     {
-        if (IsPublished)
+        if (Status == Status.Published)
             throw new InvalidOperationException($"Course {Id} is already published");
 
-        IsPublished = true;
+        Status = Status.Published;
     }
 
-    public void Hide()
+    public void Archive()
+    {
+        if (Status == Status.Archived)
+            throw new InvalidOperationException($"Course {Id} is already archived");
+
+        Status = Status.Archived;
+    }
     {
         if (IsPublished == false)
             throw new InvalidOperationException($"Course {Id} is already hided");

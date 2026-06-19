@@ -5,17 +5,21 @@ public class Lesson
     public LessonId Id { get; }
     public string Title { get; private set; }
     public string Description { get; private set; }
+    public Status Status { get; private set; }
 
-    public Lesson(string title, string description)
+    private Lesson(string title, string description)
     {
-        if (string.IsNullOrWhiteSpace(title))
-            throw new ArgumentNullException(nameof(title), $"Поступил пустой {nameof(title)}");
-
-        if (description is null)
-            throw new ArgumentNullException(nameof(description), $"Поступил пустой {nameof(description)}");
-
         Title = title;
         Description = description;
+        Status = Status.Draft;
+    }
+
+    public static Lesson Create(string title, string description)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(title);
+        ArgumentException.ThrowIfNullOrWhiteSpace(description);
+
+        return new Lesson(title, description);
     }
 
     public void Rename(string newTitle)
@@ -32,5 +36,21 @@ public class Lesson
             throw new ArgumentNullException(nameof(newDescription), $"Поступил пустой {nameof(newDescription)}");
 
         Description = newDescription;
+    }
+
+    public void Publish()
+    {
+        if (Status == Status.Published)
+            throw new InvalidOperationException($"Lesson {Id} is already published");
+
+        Status = Status.Published;
+    }
+
+    public void Archive()
+    {
+        if (Status == Status.Archived)
+            throw new InvalidOperationException($"Lesson {Id} is already archived");
+
+        Status = Status.Archived;
     }
 }
