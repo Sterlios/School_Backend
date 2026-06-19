@@ -6,7 +6,6 @@ namespace School.Domain.Courses;
 public class Course
 {
     private readonly List<Module> _modules = new();
-    private readonly List<CourseMember> _members = new();
 
     public CourseId Id { get; }
     public string Title { get; private set; }
@@ -43,10 +42,20 @@ public class Course
 
         Status = Status.Archived;
     }
-    {
-        if (IsPublished == false)
-            throw new InvalidOperationException($"Course {Id} is already hided");
 
-        IsPublished = false;
+    public void AddModule(Module module)
+    {
+        if (_modules.Any(m => m.Id == module.Id))
+            throw new InvalidOperationException($"Cannot add module {module.Id}. Course {Id} already has Module.");
+
+        _modules.Add(module);
+    }
+
+    public void RemoveModule(Module module)
+    {
+        if (!_modules.Any(m => m.Id == module.Id))
+            throw new InvalidOperationException($"Cannot remove module {module.Id}. Course {Id} does not have Module.");
+
+        _modules.Remove(module);
     }
 }

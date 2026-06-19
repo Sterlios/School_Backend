@@ -1,5 +1,5 @@
 ﻿using School.Domain.Common;
-﻿using School.Domain.Lessons;
+using School.Domain.Lessons;
 
 namespace School.Domain.Modules;
 
@@ -29,8 +29,19 @@ public class Module
 
     public void AddLesson(Lesson lesson)
     {
-        if (_lessons.Contains(lesson))
+        if (_lessons.Any(l => l.Id == lesson.Id))
             throw new InvalidOperationException($"Cannot add lesson {lesson.Id}. Module {Id} already has Lesson.");
+
+        _lessons.Add(lesson);
+    }
+
+    public void RemoveLesson(Lesson lesson)
+    {
+        if (!_lessons.Any(l => l.Id == lesson.Id))
+            throw new InvalidOperationException($"Cannot remove lesson {lesson.Id}. Module {Id} does not have Lesson.");
+
+        _lessons.Remove(lesson);
+    }
 
     public void Publish()
     {
