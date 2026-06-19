@@ -26,16 +26,14 @@ public class Lesson
 
     public void Rename(string newTitle)
     {
-        if (string.IsNullOrWhiteSpace(newTitle))
-            throw new ArgumentNullException(nameof(newTitle), $"Поступил пустой {nameof(newTitle)}");
+        ArgumentException.ThrowIfNullOrWhiteSpace(newTitle);
 
         Title = newTitle;
     }
 
     public void ChangeDescription(string newDescription)
     {
-        if (newDescription is null)
-            throw new ArgumentNullException(nameof(newDescription), $"Поступил пустой {nameof(newDescription)}");
+        ArgumentNullException.ThrowIfNull(newDescription);
 
         Description = newDescription;
     }
