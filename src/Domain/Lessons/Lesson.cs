@@ -4,17 +4,17 @@ namespace School.Domain.Lessons;
 
 public class Lesson
 {
-    public LessonId Id { get; }
-    public string Title { get; private set; }
-    public string Description { get; private set; }
-    public Status Status { get; private set; }
-
     private Lesson(string title, string description)
     {
         Title = title;
         Description = description;
         Status = Status.Draft;
     }
+
+    public LessonId Id { get; }
+    public string Title { get; private set; }
+    public string Description { get; private set; }
+    public Status Status { get; private set; }
 
     public static Lesson Create(string title, string description)
     {

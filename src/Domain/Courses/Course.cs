@@ -7,17 +7,17 @@ public class Course
 {
     private readonly List<Module> _modules = new();
 
-    public CourseId Id { get; }
-    public string Title { get; private set; }
-    public string Description { get; private set; }
-    public Status Status { get; private set; }
-
     private Course(string title, string description)
     {
         Title = title;
         Description = description;
         Status = Status.Draft;
     }
+
+    public CourseId Id { get; }
+    public string Title { get; private set; }
+    public string Description { get; private set; }
+    public Status Status { get; private set; }
 
     public static Course Create(string title, string description)
     {
