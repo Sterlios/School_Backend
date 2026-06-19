@@ -1,3 +1,5 @@
+﻿using School.Domain.Common;
+
 ﻿namespace School.Domain.Lessons;
 
 public class Lesson
