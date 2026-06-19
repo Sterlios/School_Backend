@@ -42,6 +42,7 @@ public class EmailTests
     [InlineData("anton@Kuzmin")]
     [InlineData("@gmail.com")]
     [InlineData("anton.gmail.com")]
+    [InlineData("ant@on@gmail.com")]
     [InlineData("anton@@gmail.com")]
     public void Create_Should_Throw_When_Email_Has_Invalid_Format(string value)
     {
