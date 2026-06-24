@@ -11,6 +11,8 @@ public class User //TODO: Create Custom Exceptions for User domain
         Status = UserStatuses.Active;
     }
 
+    private User() { } // For EF
+
     public UserId Id { get; }
     public FullName Name { get; private set; }
     public Email Email { get; private set; }

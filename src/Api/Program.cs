@@ -4,12 +4,18 @@ using School.Infrastructure.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
-builder.Services.AddApplication();
-builder.Services.AddInfrastructure();
+builder.Services.AddControllers();
+builder.AddApplication();
+builder.AddInfrastructure();
 
 if (!builder.Environment.IsEnvironment("master"))
 {
     builder.Services.AddSwaggerGen();
+}
+
+if (builder.Environment.IsEnvironment("local"))
+{
+    builder.Configuration.AddUserSecrets<Program>();
 }
 
 var app = builder.Build();
@@ -22,5 +28,7 @@ if (!builder.Environment.IsEnvironment("master"))
 }
 
 app.UseHttpsRedirection();
+app.UseRouting();
+app.MapControllers();
 
 app.Run();

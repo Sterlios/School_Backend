@@ -1,0 +1,10 @@
+﻿using School.Domain.Users;
+
+namespace School.Application.Interfaces;
+
+public interface IUserRepository
+{
+    Task AddAsync(User user, CancellationToken cancellationToken);
+    Task<bool> ExistsByEmailAsync(Email email, CancellationToken cancellationToken);
+    Task<User?> GetByIdAsync(Guid id, CancellationToken ct);
+}

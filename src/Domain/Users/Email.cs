@@ -10,6 +10,8 @@ public class Email
         Value = value;
     }
 
+    private Email() { } // For EF Core
+
     public string Value { get; }
 
     public static Email Create(string value)
