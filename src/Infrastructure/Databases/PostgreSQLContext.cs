@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using School.Application.Interfaces;
 using School.Domain.Users;
 
 namespace School.Infrastructure.Databases;
 
-public class PostgreSQLContext: DbContext
+public class PostgreSQLContext: DbContext, IUnitOfWork
 {
     public PostgreSQLContext(DbContextOptions options) : base(options)
     {
@@ -23,8 +24,12 @@ public class PostgreSQLContext: DbContext
                 .HasName("PK_Users");
 
             builder.Property(u => u.Id)
+                .IsRequired()
+                .ValueGeneratedOnAdd();
+
+            builder.Property(u => u.Id)
                 .HasConversion(
-                    id => id.value,
+                    id => id.Value,
                     value => new UserId(value));
 
             builder.Property(u => u.Email)

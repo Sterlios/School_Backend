@@ -1,4 +1,5 @@
 ﻿using School.Application.Interfaces;
+using School.Domain.Users;
 
 namespace School.Application.Users.GetUser;
 
@@ -6,7 +7,7 @@ public class GetUserQueryHandler(IUserRepository userRepository)
 {
     public async Task<GetUserResponse> Handle(GetUserQuery getUserQuery, CancellationToken ct)
     {
-        var user = await userRepository.GetByIdAsync(getUserQuery.Id, ct);
+        var user = await userRepository.GetByIdAsync(new UserId(getUserQuery.Id), ct);
 
         if (user is null)
         {
@@ -15,7 +16,7 @@ public class GetUserQueryHandler(IUserRepository userRepository)
 
         return new GetUserResponse
         {
-            Id = user.Id.value,
+            Id = user.Id.Value,
             Name = string.Join(" ", user.Name.FirstName, user.Name.LastName),
             Email = user.Email.Value
         };

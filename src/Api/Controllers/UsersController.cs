@@ -14,7 +14,7 @@ public class UsersController(
     public async Task<IActionResult> RegisterUser([FromBody] RegisterUserCommand command, CancellationToken ct)
     {
         var user = await registerUserCommandHandler.Handle(command, ct);
-        return CreatedAtAction(nameof(GetUser), new { id = user.UserId.value }, user);
+        return CreatedAtAction(nameof(GetUser), new { id = user.UserId.Value }, user);
     }
 
     [HttpGet("{id}")]

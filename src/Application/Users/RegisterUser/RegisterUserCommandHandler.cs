@@ -5,7 +5,8 @@ namespace School.Application.Users.RegisterUser;
 
 public class RegisterUserCommandHandler(
     IUserRepository userRepository,
-    IPasswordHasher passwordHasher
+    IPasswordHasher passwordHasher,
+    IUnitOfWork unitOfWork
 )
 {
     public async Task<RegisterUserResponse> Handle(RegisterUserCommand command, CancellationToken cancellationToken)
@@ -28,6 +29,7 @@ public class RegisterUserCommandHandler(
         );
 
         await userRepository.AddAsync(user, cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
 
         return new RegisterUserResponse { UserId = user.Id };
     }

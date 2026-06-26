@@ -17,7 +17,7 @@ public static class DependencyInjectionExtension
             .AddScoped<IUserRepository, UsersRepository>()
             .AddScoped<IPasswordHasher, PasswordHasher>();
 
-        builder.Services.AddDbContext<PostgreSQLContext>(options =>
+        builder.Services.AddDbContext<IUnitOfWork, PostgreSQLContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres")));
 
         return builder;

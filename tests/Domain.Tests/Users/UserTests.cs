@@ -1,12 +1,12 @@
 ﻿using FluentAssertions;
 using School.Domain.Users;
 
-namespace Domain.Tests.Users;
+namespace School.Domain.Tests.Users;
 
 public class UserTests
 {
     [Fact]
-    public void Register_Should_CreateUser_WhenValidParametersAreProvided()
+    public void Register_Should_CreateUser_When_ValidParametersAreProvided()
     {
         var user = Create();
 
@@ -16,7 +16,7 @@ public class UserTests
     }
 
     [Fact]
-    public void Register_Should_ThrowException_WhenNameIsNull()
+    public void Register_Should_Throw_When_NameIsNull()
     {
         Action act = () => User.Register(null!, Email.Create("Anton@gmail.com"), "password");
 
@@ -24,7 +24,7 @@ public class UserTests
     }
 
     [Fact]
-    public void Register_Should_ThrowException_WhenEmailIsNull()
+    public void Register_Should_Throw_When_EmailIsNull()
     {
         Action act = () => User.Register(FullName.Create("Anton", "Kuzmin"), null, "password");
 
@@ -35,7 +35,7 @@ public class UserTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
-    public void Register_Should_ThrowException_WhenPasswordIsNullOrEmptyOrWhiteSpace(string password)
+    public void Register_Should_Throw_When_PasswordIsNullOrEmptyOrWhiteSpace(string password)
     {
         Action act = () => User.Register(FullName.Create("Anton", "Kuzmin"), Email.Create("Anton@gmail.com"), password);
 
@@ -43,7 +43,7 @@ public class UserTests
     }
 
     [Fact]
-    public void Block_Should_ChangeStatusToBlocked_WhenUserIsActive()
+    public void Block_Should_ChangeStatusToBlocked_When_UserIsActive()
     {
         var user = Create();
 
@@ -53,7 +53,7 @@ public class UserTests
     }
 
     [Fact]
-    public void Block_Should_ThrowException_WhenUserIsAlreadyBlocked()
+    public void Block_Should_Throw_When_UserIsAlreadyBlocked()
     {
         var user = Create();
 
@@ -65,7 +65,7 @@ public class UserTests
     }
 
     [Fact]
-    public void Unblock_Should_ChangeStatusToActive_WhenUserIsBlocked()
+    public void Unblock_Should_ChangeStatusToActive_When_UserIsBlocked()
     {
         var user = Create();
 
@@ -77,7 +77,7 @@ public class UserTests
     }
 
     [Fact]
-    public void Unblock_Should_ThrowException_WhenUserIsAlreadyActive()
+    public void Unblock_Should_Throw_When_UserIsAlreadyActive()
     {
         var user = Create();
 
@@ -87,7 +87,7 @@ public class UserTests
     }
 
     [Fact]
-    public void ChangeRoleToAdmin_Should_ChangeRole_WhenUserIsUser()
+    public void ChangeRoleToAdmin_Should_ChangeRole_When_UserIsUser()
     {
         var user = Create();
 
@@ -97,7 +97,7 @@ public class UserTests
     }
 
     [Fact]
-    public void ChangeRoleToUser_Should_ThrowException_WhenUserIsUser()
+    public void ChangeRoleToUser_Should_Throw_When_UserIsUser()
     {
         var user = Create();
 
@@ -107,7 +107,7 @@ public class UserTests
     }
 
     [Fact]
-    public void ChangePassword_Should_Change_WhenNewPasswordIsOk()
+    public void ChangePassword_Should_Change_When_NewPasswordIsOk()
     {
         var user = Create();
 
@@ -120,7 +120,7 @@ public class UserTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
-    public void ChangePassword_Should_ThrowException_WhenNewPasswordIsNullOrEmptyOrWhiteSpace(string password)
+    public void ChangePassword_Should_Throw_When_NewPasswordIsNullOrEmptyOrWhiteSpace(string password)
     {
         var user = Create();
 
@@ -130,7 +130,7 @@ public class UserTests
     }
 
     [Fact]
-    public void ChangePassword_Should_ThrowException_WhenNewPasswordEqualOldPassword()
+    public void ChangePassword_Should_Throw_When_NewPasswordEqualOldPassword()
     {
         var user = Create();
 
