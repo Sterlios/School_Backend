@@ -18,4 +18,10 @@ public class PasswordHasher: IPasswordHasher
             return Convert.ToBase64String(hashBytes);
         }
     }
+
+    public bool Verify(string password, string hashedPassword)
+    {
+        var hashedInput = Hash(password);
+        return hashedInput == hashedPassword;
+    }
 }
