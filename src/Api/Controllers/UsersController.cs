@@ -18,13 +18,13 @@ public class UsersController(
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetUser(Guid id, CancellationToken ct)
+    public async Task<ActionResult<GetUserResponse?>> GetUser(Guid id, CancellationToken ct)
     {
         var user = await getUserHandler.Handle(new GetUserQuery(id), ct);
 
         if (user is null)
             return NotFound();
 
-        return Ok(user);
+        return user;
     }
 }
