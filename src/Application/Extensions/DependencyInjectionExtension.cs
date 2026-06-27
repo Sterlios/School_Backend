@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using School.Application.Users.GetUser;
+using School.Application.Users.LoginUser;
 using School.Application.Users.RegisterUser;
 
 namespace School.Application.Extensions;
@@ -11,6 +12,7 @@ public static class DependencyInjectionExtension
     {
         builder.Services.AddScoped<RegisterUserCommandHandler>();
         builder.Services.AddScoped<GetUserQueryHandler>();
+        builder.Services.AddScoped<LoginUserCommandHandler>();
 
         return builder;
     }
