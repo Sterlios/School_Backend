@@ -19,6 +19,7 @@ public class Module
     public string Description { get; private set; }
     public Status Status { get; private set; }
     public bool IsActive => Status == Status.Published && _lessons.Any(l => l.Status == Status.Published);
+    public IReadOnlyCollection<Lesson> Lessons => _lessons.AsReadOnly();
 
     public static Module Create(string title, string description)
     {
@@ -58,5 +59,17 @@ public class Module
             throw new InvalidOperationException($"Lesson {Id} is already archived");
 
         Status = Status.Archived;
+    }
+
+    public void MoveLesson(Lesson lesson, int newIndex)
+    {
+        if (!_lessons.Any(l => l.Id == lesson.Id))
+            throw new InvalidOperationException($"Cannot move lesson {lesson.Id}. Module {Id} does not have Lesson.");
+
+        if (newIndex < 0 || newIndex >= _lessons.Count)
+            throw new ArgumentOutOfRangeException(nameof(newIndex), $"New index {newIndex} is out of range for lessons in module {Id}.");
+
+        _lessons.Remove(lesson);
+        _lessons.Insert(newIndex, lesson);
     }
 }

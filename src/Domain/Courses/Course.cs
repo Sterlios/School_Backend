@@ -19,6 +19,7 @@ public class Course
     public string Description { get; private set; }
     public Status Status { get; private set; }
     public bool IsActive => Status == Status.Published && _modules.Any(m => m.IsActive);
+    public IReadOnlyCollection<Module> Modules => _modules.AsReadOnly();
 
     public static Course Create(string title, string description)
     {
@@ -58,5 +59,17 @@ public class Course
             throw new InvalidOperationException($"Cannot remove module {module.Id}. Course {Id} does not have Module.");
 
         _modules.Remove(module);
+    }
+
+    public void MoveModule(Module module, int newIndex)
+    {
+        if (!_modules.Any(m => m.Id == module.Id))
+            throw new InvalidOperationException($"Cannot move module {module.Id}. Course {Id} does not have Module.");
+
+        if (newIndex < 0 || newIndex >= _modules.Count)
+            throw new ArgumentOutOfRangeException(nameof(newIndex), $"New index {newIndex} is out of range for course {Id}.");
+
+        _modules.Remove(module);
+        _modules.Insert(newIndex, module);
     }
 }
