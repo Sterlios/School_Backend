@@ -18,6 +18,7 @@ public class Course
     public string Title { get; private set; }
     public string Description { get; private set; }
     public Status Status { get; private set; }
+    public bool IsActive => Status == Status.Published && _modules.Any(m => m.IsActive);
 
     public static Course Create(string title, string description)
     {

@@ -18,6 +18,7 @@ public class Module
     public string Title { get; private set; }
     public string Description { get; private set; }
     public Status Status { get; private set; }
+    public bool IsActive => Status == Status.Published && _lessons.Any(l => l.Status == Status.Published);
 
     public static Module Create(string title, string description)
     {
