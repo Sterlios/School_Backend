@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using School.Application.Interfaces;
 using School.Domain.Users;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 

@@ -6,7 +6,9 @@
     <Project Path="src/Infrastructure/Infrastructure.csproj" />
   </Folder>
   <Folder Name="/tests/">
-    <Project Path="tests/Application.Tests/Application.Tests.csproj" Id="552dcf9f-7ae3-446e-99c1-39ad05671f12" />
+    <Project Path="tests/Application.Tests/Application.Tests.csproj" Id="552dcf9f-7ae3-446e-99c1-39ad05671f12">
+      <Build Solution="Debug|*" Project="false" />
+    </Project>
     <Project Path="tests/Domain.Tests/Domain.Tests.csproj" Id="cf6dbe35-f365-4f26-934e-4583660505e8" />
   </Folder>
 </Solution>

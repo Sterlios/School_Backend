@@ -29,7 +29,7 @@ public class LoginUserCommandHandler(
 
         return new LoginUserResponse
         {
-            UserId = user.Id,
+            Token = token,
         };
     }
 }

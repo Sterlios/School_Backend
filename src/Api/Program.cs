@@ -27,6 +27,10 @@ if (!builder.Environment.IsEnvironment("master"))
     app.UseSwaggerUI();
 }
 
+app.UseAuthentication();
+
+app.UseAuthorization();
+
 app.UseHttpsRedirection();
 app.UseRouting();
 app.MapControllers();
