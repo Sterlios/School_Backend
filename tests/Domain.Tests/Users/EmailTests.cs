@@ -2,12 +2,12 @@
 using School.Domain.Exceptions;
 using School.Domain.Users;
 
-namespace Domain.Tests.Users;
+namespace School.Domain.Tests.Users;
 
 public class EmailTests
 {
     [Fact]
-    public void Create_Should_Create_Email_When_Value_Is_Valid()
+    public void Create_Should_CreateEmail_When_ValueIsValid()
     {
         var value = "anton@example.com";
 
@@ -17,7 +17,7 @@ public class EmailTests
     }
 
     [Fact]
-    public void Create_Should_Throw_When_Email_Is_Null()
+    public void Create_Should_Throw_When_EmailIsNull()
     {
         string? value = null;
 
@@ -27,7 +27,7 @@ public class EmailTests
     }
 
     [Fact]
-    public void Create_Should_Throw_When_Email_Is_Empty()
+    public void Create_Should_Throw_When_EmailIsEmpty()
     {
         var value = "";
 
@@ -42,8 +42,9 @@ public class EmailTests
     [InlineData("anton@Kuzmin")]
     [InlineData("@gmail.com")]
     [InlineData("anton.gmail.com")]
+    [InlineData("ant@on@gmail.com")]
     [InlineData("anton@@gmail.com")]
-    public void Create_Should_Throw_When_Email_Has_Invalid_Format(string value)
+    public void Create_Should_Throw_When_EmailHasInvalidFormat(string value)
     {
         Action act = () => Email.Create(value);
 
@@ -51,7 +52,7 @@ public class EmailTests
     }
 
     [Fact]
-    public void Create_Should_Normalize_Email()
+    public void Create_Should_NormalizeEmail()
     {
         var value = "Anton@Example.Com";
 
@@ -61,7 +62,7 @@ public class EmailTests
     }
 
     [Fact]
-    public void Emails_With_Same_Value_Should_Be_Equal()
+    public void EmailsWithSameValue_Should_BeEqual()
     {
         var first = Email.Create("Anton@Example.Com");
         var second = Email.Create("anton@example.com");

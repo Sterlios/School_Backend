@@ -8,6 +8,8 @@ public class FullName
         LastName = lastName;
     }
 
+    private FullName() { } // For EF Core
+
     public string FirstName { get; private set; }
     public string LastName { get; private set; }
 

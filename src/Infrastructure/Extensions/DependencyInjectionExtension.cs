@@ -1,11 +1,25 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using School.Application.Interfaces;
+using School.Infrastructure.Databases;
+using School.Infrastructure.Databases.Repositories;
+using School.Infrastructure.Security;
 
 namespace School.Infrastructure.Extensions;
 
 public static class DependencyInjectionExtension
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services)
+    public static IHostApplicationBuilder AddInfrastructure(this IHostApplicationBuilder builder)
     {
-        return services;
+        builder.Services
+            .AddScoped<IUserRepository, UsersRepository>()
+            .AddScoped<IPasswordHasher, PasswordHasher>();
+
+        builder.Services.AddDbContext<IUnitOfWork, PostgreSQLContext>(options =>
+            options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres")));
+
+        return builder;
     }
 }
