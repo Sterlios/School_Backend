@@ -18,7 +18,9 @@ public class GetUserQueryHandler(IUserRepository userRepository)
         {
             Id = user.Id.Value,
             Name = string.Join(" ", user.Name.FirstName, user.Name.LastName),
-            Email = user.Email.Value
+            Email = user.Email.Value,
+            Role = user.Role.ToString(),
+            Status = user.Status
         };
     }
 }

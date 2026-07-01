@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using School.Application.Authorization;
+using School.Application.Users.BlockUser;
 using School.Application.Users.GetUser;
+using School.Application.Users.GetUsersList;
 using School.Application.Users.LoginUser;
 using School.Application.Users.RegisterUser;
+using School.Application.Users.UnblockUser;
 
 namespace School.Api.Controllers;
 
@@ -11,7 +15,10 @@ namespace School.Api.Controllers;
 public class UsersController(
     RegisterUserCommandHandler registerUserCommandHandler,
     GetUserQueryHandler getUserHandler,
-    LoginUserCommandHandler loginUserCommandHandler): ControllerBase
+    LoginUserCommandHandler loginUserCommandHandler,
+    GetUsersListHandler getUsersListHandler,
+    BlockUserHandler blockUserHandler,
+    UnblockUserHandler unblockUserHandler): ControllerBase
 {
     [HttpPost("register")]
     [AllowAnonymous]
@@ -22,7 +29,8 @@ public class UsersController(
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<GetUserResponse?>> GetUser(Guid id, CancellationToken ct)
+    [Authorize]
+    public async Task<ActionResult<Application.Users.GetUser.GetUserResponse?>> GetUser(Guid id, CancellationToken ct)
     {
         var user = await getUserHandler.Handle(new GetUserQuery(id), ct);
 
@@ -30,6 +38,33 @@ public class UsersController(
             return NotFound();
 
         return user;
+    }
+
+    [HttpPost]
+    [Authorize(nameof(Permissions.ViewUsers))]
+    public async Task<ActionResult<List<Application.Users.GetUsersList.GetUserResponse>>> GetUsers([FromQuery] FilterUsersListQuery query, CancellationToken ct)
+    {
+        var users = await getUsersListHandler.Handle(query, ct);
+
+        return users;
+    }
+
+    [HttpPut("{id}/block")]
+    [Authorize(nameof(Permissions.BlockUsers))]
+    public async Task<IActionResult> BlockUser(Guid id, CancellationToken ct)
+    {
+        await blockUserHandler.Handle(new BlockUserQuery(id), ct);
+
+        return NoContent();
+    }
+
+    [HttpPut("{id}/unblock")]
+    [Authorize(nameof(Permissions.BlockUsers))]
+    public async Task<IActionResult> UnblockUser(Guid id, CancellationToken ct)
+    {
+        await unblockUserHandler.Handle(new UnblockUserQuery(id), ct);
+
+        return NoContent();
     }
 
     [HttpPost("login")]
@@ -42,12 +77,5 @@ public class UsersController(
             return NotFound();
 
         return user;
-    }
-
-    [HttpGet("test")]
-    [Authorize]
-    public async Task<IActionResult> GetMessage()
-    {
-        return Ok("Hello");
     }
 }

@@ -1,4 +1,5 @@
-﻿using School.Domain.Users;
+﻿using School.Application.Users.GetUsersList;
+using School.Domain.Users;
 
 namespace School.Application.Interfaces;
 
@@ -8,4 +9,5 @@ public interface IUserRepository
     Task<bool> ExistsByEmailAsync(Email email, CancellationToken cancellationToken);
     Task<User?> GetByEmail(Email email);
     Task<User?> GetByIdAsync(UserId id, CancellationToken ct);
+    Task<List<User>> GetUsersAsync(FilterUsersListQuery filterUsersListQuery, CancellationToken ct);
 }
