@@ -1,6 +1,6 @@
 ﻿using School.Domain.Users;
 
-namespace School.Application.Users.RegisterUser;
+namespace School.Application.Users.Responses;
 
 public class RegisterUserResponse
 {

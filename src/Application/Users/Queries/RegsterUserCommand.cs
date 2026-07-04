@@ -1,4 +1,4 @@
-﻿namespace School.Application.Users.RegisterUser;
+﻿namespace School.Application.Users.Queries;
 
 public class RegisterUserCommand
 {

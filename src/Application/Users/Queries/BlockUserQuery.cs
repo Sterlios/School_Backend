@@ -1,4 +1,4 @@
-﻿namespace School.Application.Users.BlockUser;
+﻿namespace School.Application.Users.Queries;
 
 public class BlockUserQuery
 {

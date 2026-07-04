@@ -23,6 +23,7 @@ public static class DependencyInjectionExtension
 
         builder.Services.AddDbContext<IUnitOfWork, PostgreSQLContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres")));
+
         builder.Services.Configure<JwtOptions>(
             builder.Configuration.GetSection(JwtOptions.SectionName));
 

@@ -1,4 +1,4 @@
-﻿namespace School.Application.Users.GetUsersList;
+﻿namespace School.Application.Users.Queries;
 
 public class FilterUsersListQuery
 {

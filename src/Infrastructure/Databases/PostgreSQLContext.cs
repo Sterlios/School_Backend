@@ -48,6 +48,11 @@ public class PostgreSQLContext: DbContext, IUnitOfWork
                     .HasColumnName("LastName")
                     .IsRequired();
             });
+
+            builder.Property(u => u.Role)
+                .HasConversion(
+                    v => (int)v,
+                    v => (GlobalRoles)v);
         });
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace School.Application.Users.GetUser;
+﻿namespace School.Application.Users.Queries;
 
 public class GetUserQuery
 {

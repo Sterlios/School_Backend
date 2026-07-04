@@ -1,4 +1,4 @@
-﻿using School.Application.Users.GetUsersList;
+﻿using School.Application.Users.Queries;
 using School.Domain.Users;
 
 namespace School.Application.Interfaces;

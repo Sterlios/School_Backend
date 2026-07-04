@@ -1,4 +1,4 @@
-﻿namespace School.Application.Users.LoginUser;
+﻿namespace School.Application.Users.Queries;
 
 public class LoginUserCommand
 {

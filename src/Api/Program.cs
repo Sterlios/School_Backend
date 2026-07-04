@@ -1,5 +1,4 @@
 using Microsoft.OpenApi;
-using School.Application.Authorization;
 using School.Application.Extensions;
 using School.Infrastructure.Extensions;
 
@@ -9,19 +8,19 @@ builder.Services.AddControllers();
 builder.AddApplication();
 builder.AddInfrastructure();
 
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy(Policies.Admin, policy =>
-    {
-        policy.RequireRole(Policies.Admin);
-        policy.RequireClaim("permissions", Policies.AdminPermissions);
-    });
-    options.AddPolicy(Policies.User, policy =>
-    {
-        policy.RequireRole(Policies.User);
-        policy.RequireClaim("permissions", Policies.UserPermissions);
-    });
-});
+//builder.Services.AddAuthorization(options =>
+//{
+//    options.AddPolicy(Policies.Admin, policy =>
+//    {
+//        policy.RequireRole(Policies.Admin);
+//        policy.RequireClaim("permissions", Policies.AdminPermissions);
+//    });
+//    options.AddPolicy(Policies.User, policy =>
+//    {
+//        policy.RequireRole(Policies.User);
+//        policy.RequireClaim("permissions", Policies.UserPermissions);
+//    });
+//});
 
 if (!builder.Environment.IsEnvironment("master"))
 {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using School.Application.Interfaces;
-using School.Application.Users.GetUsersList;
+using School.Application.Users.Queries;
 using School.Domain.Users;
 
 namespace School.Infrastructure.Databases.Repositories;
@@ -18,6 +18,7 @@ public class UsersRepository(PostgreSQLContext context): IUserRepository
 
     public async Task<User?> GetByIdAsync(UserId id, CancellationToken ct) =>
         await context.Users.FirstOrDefaultAsync(u => u.Id == id, ct);
+
     public async Task<List<User>> GetUsersAsync(FilterUsersListQuery filterUsersListQuery, CancellationToken ct) =>
         await context.Users
             .Skip((filterUsersListQuery.PageNumber - 1) * filterUsersListQuery.TotalCount)

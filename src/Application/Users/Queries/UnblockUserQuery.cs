@@ -1,4 +1,4 @@
-﻿namespace School.Application.Users.UnblockUser;
+﻿namespace School.Application.Users.Queries;
 
 public class UnblockUserQuery
 {
