@@ -69,4 +69,13 @@ public class EmailTests
 
         first.Should().Be(second);
     }
+
+    [Fact]
+    public void EmailsWithDifferentValues_Should_NotBeEqual()
+    {
+        var first = Email.Create("Anton@Example.Com");
+        var second = Email.Create("john@example.com");
+
+        first.Should().NotBe(second);
+    }
 }
