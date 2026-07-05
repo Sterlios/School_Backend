@@ -1,6 +1,6 @@
 ﻿namespace School.Domain.Users;
 
-public class FullName
+public record FullName
 {
     private FullName(string firstName, string lastName)
     {
@@ -10,8 +10,8 @@ public class FullName
 
     private FullName() { } // For EF Core
 
-    public string FirstName { get; private set; }
-    public string LastName { get; private set; }
+    public string FirstName { get; }
+    public string LastName { get; }
 
     public static FullName Create(string firstName, string lastName)
     {
