@@ -19,6 +19,7 @@ public static class DependencyInjectionExtension
     {
         builder.Services
             .AddScoped<IUserRepository, UsersRepository>()
+            .AddScoped<IRolesRepository, RolesRepository>()
             .AddScoped<IPasswordHasher, PasswordHasher>();
 
         builder.Services.AddDbContext<IUnitOfWork, PostgreSQLContext>(options =>

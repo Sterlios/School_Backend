@@ -30,8 +30,7 @@ public class UsersController(UserService userService): ControllerBase
         return user;
     }
 
-    [HttpPost]
-    [Authorize]
+    [HttpGet]
     public async Task<ActionResult<List<GetUserResponse>>> GetUsers([FromQuery] FilterUsersListQuery query, CancellationToken ct)
     {
         var users = await userService.GetUsersList(query, ct);

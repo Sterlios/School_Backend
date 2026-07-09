@@ -5,9 +5,9 @@ namespace School.Application.Interfaces;
 
 public interface IUserRepository
 {
-    Task AddAsync(User user, CancellationToken cancellationToken);
-    Task<bool> ExistsByEmailAsync(Email email, CancellationToken cancellationToken);
-    Task<User?> GetByEmail(Email email);
-    Task<User?> GetByIdAsync(UserId id, CancellationToken ct);
-    Task<List<User>> GetUsersAsync(FilterUsersListQuery filterUsersListQuery, CancellationToken ct);
+    Task AddAsync(User user, CancellationToken cancellationToken = default);
+    Task<bool> ExistsByEmailAsync(Email email, CancellationToken cancellationToken = default);
+    Task<User?> GetByEmail(Email email, CancellationToken cancellationToken = default);
+    Task<User?> GetByIdAsync(UserId id, CancellationToken cancellationToken = default);
+    Task<List<User>> GetUsersAsync(FilterUsersListQuery filterUsersListQuery, CancellationToken cancellationToken = default);
 }

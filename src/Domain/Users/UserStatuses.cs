@@ -2,6 +2,6 @@
 
 public enum UserStatuses
 {
-    Active,
-    Blocked
+    Blocked = 0,
+    Active
 }

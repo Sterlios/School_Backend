@@ -1,7 +1,9 @@
 ﻿using FluentAssertions;
 using Moq;
+using School.Application.Authorization;
 using School.Application.Interfaces;
-using School.Application.Users.RegisterUser;
+using School.Application.Users;
+using School.Application.Users.Queries;
 using School.Domain.Users;
 
 namespace School.Application.Tests.Users;
@@ -14,6 +16,8 @@ public class RegisterUserHandlerTests
         var repository = new Mock<IUserRepository>();
         var unitOfWork = new Mock<IUnitOfWork>();
         var passwordHasher = new Mock<IPasswordHasher>();
+        var jwtTokenGenerator = new Mock<IJwtTokenGenerator>();
+        var rolesRepository = new Mock<IRolesRepository>();
 
         repository
             .Setup(x => x.ExistsByEmailAsync(It.IsAny<Email>(), It.IsAny<CancellationToken>()))
@@ -23,7 +27,11 @@ public class RegisterUserHandlerTests
             .Setup(x => x.Hash(It.IsAny<string>()))
             .Returns("hash");
 
-        var handler = new RegisterUserCommandHandler(repository.Object, passwordHasher.Object, unitOfWork.Object);
+        jwtTokenGenerator
+            .Setup(x => x.Generate(It.IsAny<UserPayload>()))
+            .Returns("token");
+
+        var userService = new UserService(repository.Object, rolesRepository.Object, passwordHasher.Object, unitOfWork.Object, jwtTokenGenerator.Object);
 
         var command = new RegisterUserCommand()
         {
@@ -34,7 +42,7 @@ public class RegisterUserHandlerTests
             ConfirmPassword = "password"
         };
 
-        var result = await handler.Handle(command, CancellationToken.None);
+        var result = await userService.Register(command, CancellationToken.None);
 
         result.Should().NotBeNull();
 
@@ -47,8 +55,10 @@ public class RegisterUserHandlerTests
     public async Task Handle_Should_Throw_When_EmailExists()
     {
         var repository = new Mock<IUserRepository>();
+        var rolesRepository = new Mock<IRolesRepository>();
         var passwordHasher = new Mock<IPasswordHasher>();
         var unitOfWork = new Mock<IUnitOfWork>();
+        var jwtTokenGenerator = new Mock<IJwtTokenGenerator>();
 
         repository
             .Setup(x => x.ExistsByEmailAsync(It.IsAny<Email>(), It.IsAny<CancellationToken>()))
@@ -58,7 +68,11 @@ public class RegisterUserHandlerTests
             .Setup(x => x.Hash(It.IsAny<string>()))
             .Returns("hash");
 
-        var handler = new RegisterUserCommandHandler(repository.Object, passwordHasher.Object, unitOfWork.Object);
+        jwtTokenGenerator
+            .Setup(x => x.Generate(It.IsAny<UserPayload>()))
+            .Returns("token");
+
+        var userService = new UserService(repository.Object, rolesRepository.Object, passwordHasher.Object, unitOfWork.Object, jwtTokenGenerator.Object);
 
         var command = new RegisterUserCommand()
         {
@@ -69,7 +83,7 @@ public class RegisterUserHandlerTests
             ConfirmPassword = "password"
         };
 
-        var act = () => handler.Handle(command, CancellationToken.None);
+        var act = () => userService.Register(command, CancellationToken.None);
 
         await act.Should().ThrowAsync();
     }

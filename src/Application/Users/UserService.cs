@@ -1,4 +1,5 @@
-﻿using School.Application.Interfaces;
+﻿using School.Application.Authorization;
+using School.Application.Interfaces;
 using School.Application.Users.Queries;
 using School.Application.Users.Responses;
 using School.Domain.Users;
@@ -7,6 +8,7 @@ namespace School.Application.Users;
 
 public class UserService(
     IUserRepository userRepository,
+    IRolesRepository rolesRepository,
     IPasswordHasher passwordHasher,
     IUnitOfWork unitOfWork,
     IJwtTokenGenerator jwtTokenGenerator)
@@ -23,11 +25,13 @@ public class UserService(
 
         var fullName = FullName.Create(command.FirstName, command.LastName);
         var hashedPassword = passwordHasher.Hash(command.Password);
+        var role = await rolesRepository.GetDefaultAsync(cancellationToken);
 
         var user = User.Register(
             fullName,
             email,
-            hashedPassword
+            hashedPassword,
+            role.Id
         );
 
         await userRepository.AddAsync(user, cancellationToken);
@@ -53,7 +57,14 @@ public class UserService(
                 ErrorStatus = "Неверный пароль."
             };
 
-        var token = jwtTokenGenerator.Generate(user);
+        var role = await rolesRepository.GetByIdAsync(user.RoleId);
+
+        var token = jwtTokenGenerator.Generate(new UserPayload
+        {
+            Id = user.Id.Value,
+            Email = user.Email.Value,
+            Role = role?.Name ?? "Unknown"
+        });
 
         return new LoginUserResponse
         {
@@ -65,12 +76,19 @@ public class UserService(
     {
         var users = await userRepository.GetUsersAsync(filterUsersListQuery, ct);
 
+        var roleIds = users
+            .Select(u => u.RoleId)
+            .Distinct()
+            .ToList();
+
+        var roles = await rolesRepository.GetAllByIdsAsync(roleIds);
+
         return users.Select(u => new GetUserResponse
         {
             Id = u.Id.Value,
             Name = string.Join(" ", u.Name.FirstName, u.Name.LastName),
             Email = u.Email.Value,
-            Role = u.Role.ToString(),
+            Role = roles.FirstOrDefault(r => r.Id == u.RoleId)?.Name ?? "Unknown",
             Status = u.Status.ToString()
         }).ToList();
     }
@@ -78,6 +96,8 @@ public class UserService(
     public async Task<GetUserResponse> GetUser(GetUserQuery getUserQuery, CancellationToken ct)
     {
         var user = await userRepository.GetByIdAsync(new UserId(getUserQuery.Id), ct);
+
+        var role = await rolesRepository.GetByIdAsync(user.RoleId, ct);
 
         if (user is null)
         {
@@ -89,7 +109,7 @@ public class UserService(
             Id = user.Id.Value,
             Name = string.Join(" ", user.Name.FirstName, user.Name.LastName),
             Email = user.Email.Value,
-            Role = user.Role.ToString(),
+            Role = role?.Name ?? "Unknown",
             Status = user.Status.ToString()
         };
     }

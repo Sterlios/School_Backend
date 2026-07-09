@@ -1,5 +1,6 @@
 ﻿namespace School.Application.Authorization;
 
-public class Policies
+public class PolicyProvider(Policies policies)
 {
+
 }

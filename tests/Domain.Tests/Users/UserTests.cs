@@ -12,13 +12,12 @@ public class UserTests
 
         user.Should().NotBeNull();
         user.Status.Should().Be(UserStatuses.Active);
-        user.Role.Should().Be(GlobalRoles.User);
     }
 
     [Fact]
     public void Register_Should_Throw_When_NameIsNull()
     {
-        Action act = () => User.Register(null!, Email.Create("Anton@gmail.com"), "password");
+        Action act = () => User.Register(null!, Email.Create("Anton@gmail.com"), "password", 1);
 
         act.Should().Throw();
     }
@@ -26,7 +25,7 @@ public class UserTests
     [Fact]
     public void Register_Should_Throw_When_EmailIsNull()
     {
-        Action act = () => User.Register(FullName.Create("Anton", "Kuzmin"), null, "password");
+        Action act = () => User.Register(FullName.Create("Anton", "Kuzmin"), null, "password", 1);
 
         act.Should().Throw();
     }
@@ -37,7 +36,7 @@ public class UserTests
     [InlineData("   ")]
     public void Register_Should_Throw_When_PasswordIsNullOrEmptyOrWhiteSpace(string password)
     {
-        Action act = () => User.Register(FullName.Create("Anton", "Kuzmin"), Email.Create("Anton@gmail.com"), password);
+        Action act = () => User.Register(FullName.Create("Anton", "Kuzmin"), Email.Create("Anton@gmail.com"), password, 1);
 
         act.Should().Throw();
     }
@@ -91,9 +90,9 @@ public class UserTests
     {
         var user = Create();
 
-        user.ChangeRole(GlobalRoles.Admin);
+        user.ChangeRole(2);
 
-        user.Role.Should().Be(GlobalRoles.Admin);
+        user.RoleId.Should().Be(2);
     }
 
     [Fact]
@@ -101,7 +100,7 @@ public class UserTests
     {
         var user = Create();
 
-        Action act = () => user.ChangeRole(GlobalRoles.User);
+        Action act = () => user.ChangeRole(1);
 
         act.Should().Throw();
     }
@@ -144,6 +143,6 @@ public class UserTests
         var name = FullName.Create("Anton", "Kuzmin");
         var email = Email.Create("Anton@gmail.com");
 
-        return User.Register(name, email, "password");
+        return User.Register(name, email, "password", 1);
     }
 }

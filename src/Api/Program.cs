@@ -7,8 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.AddApplication();
 builder.AddInfrastructure();
-
-//builder.Services.AddAuthorization(options =>
+builder.Services.AddAuthorization();
+//options =>
 //{
 //    options.AddPolicy(Policies.Admin, policy =>
 //    {
