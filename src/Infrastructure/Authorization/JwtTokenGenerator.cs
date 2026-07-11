@@ -17,7 +17,7 @@ public class JwtTokenGenerator: IJwtTokenGenerator
         _options = options.Value;
     }
 
-    public string Generate(UserPayload user)
+    public string Generate(UserJwtPayload user)
     {
         var claims = new List<Claim>
         {

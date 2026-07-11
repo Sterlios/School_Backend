@@ -4,5 +4,5 @@ namespace School.Application.Interfaces;
 
 public interface IJwtTokenGenerator
 {
-    string Generate(UserPayload user);
+    string Generate(UserJwtPayload user);
 }

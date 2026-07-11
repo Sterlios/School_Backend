@@ -1,6 +1,6 @@
 ﻿namespace School.Application.Authorization;
 
-public class UserPayload
+public class UserJwtPayload
 {
     public Guid Id { get; set; }
     public required string Email { get; set; }

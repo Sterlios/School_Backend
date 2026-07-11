@@ -1,9 +1,8 @@
 ﻿using FluentAssertions;
 using Moq;
 using School.Application.Authorization;
+using School.Application.Authorization.Requests;
 using School.Application.Interfaces;
-using School.Application.Users;
-using School.Application.Users.Queries;
 using School.Domain.Users;
 
 namespace School.Application.Tests.Users;
@@ -11,7 +10,7 @@ namespace School.Application.Tests.Users;
 public class RegisterUserHandlerTests
 {
     [Fact]
-    public async Task Handle_Should_RegisterUser_When_EmailIsFree()
+    public async Task Register_Should_RegisterUser_When_EmailIsFree()
     {
         var repository = new Mock<IUserRepository>();
         var unitOfWork = new Mock<IUnitOfWork>();
@@ -28,21 +27,20 @@ public class RegisterUserHandlerTests
             .Returns("hash");
 
         jwtTokenGenerator
-            .Setup(x => x.Generate(It.IsAny<UserPayload>()))
+            .Setup(x => x.Generate(It.IsAny<UserJwtPayload>()))
             .Returns("token");
 
-        var userService = new UserService(repository.Object, rolesRepository.Object, passwordHasher.Object, unitOfWork.Object, jwtTokenGenerator.Object);
+        var authService = new AuthService(repository.Object, rolesRepository.Object, passwordHasher.Object, unitOfWork.Object);
 
-        var command = new RegisterUserCommand()
-        {
-            FirstName = "Anton",
-            LastName = "Kuzmin",
-            Email = "anton@gmail.com",
-            Password = "password",
-            ConfirmPassword = "password"
-        };
+        var command = new RegisterUserRequest(
+            "Anton",
+            "Kuzmin",
+            "anton@gmail.com",
+            "password",
+            "password"
+        );
 
-        var result = await userService.Register(command, CancellationToken.None);
+        var result = await authService.Register(command, It.IsAny<CancellationToken>());
 
         result.Should().NotBeNull();
 
@@ -52,7 +50,7 @@ public class RegisterUserHandlerTests
     }
 
     [Fact]
-    public async Task Handle_Should_Throw_When_EmailExists()
+    public async Task Register_Should_Throw_When_EmailExists()
     {
         var repository = new Mock<IUserRepository>();
         var rolesRepository = new Mock<IRolesRepository>();
@@ -69,22 +67,21 @@ public class RegisterUserHandlerTests
             .Returns("hash");
 
         jwtTokenGenerator
-            .Setup(x => x.Generate(It.IsAny<UserPayload>()))
+            .Setup(x => x.Generate(It.IsAny<UserJwtPayload>()))
             .Returns("token");
 
-        var userService = new UserService(repository.Object, rolesRepository.Object, passwordHasher.Object, unitOfWork.Object, jwtTokenGenerator.Object);
+        var authService = new AuthService(repository.Object, rolesRepository.Object, passwordHasher.Object, unitOfWork.Object);
 
-        var command = new RegisterUserCommand()
-        {
-            FirstName = "Anton",
-            LastName = "Kuzmin",
-            Email = "anton@gmail.com",
-            Password = "password",
-            ConfirmPassword = "password"
-        };
+        var command = new RegisterUserRequest(
+            "Anton",
+            "Kuzmin",
+            "anton@gmail.com",
+            "password",
+            "password"
+        );
 
-        var act = () => userService.Register(command, CancellationToken.None);
+        var act = () => authService.Register(command, CancellationToken.None);
 
-        await act.Should().ThrowAsync();
+        await act.Should().ThrowAsync<ArgumentException>();
     }
 }
