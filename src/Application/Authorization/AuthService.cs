@@ -42,7 +42,7 @@ public class AuthService(
     public async Task<LoginUserResponse> Login(LoginUserRequest command, IJwtTokenGenerator jwtTokenGenerator, CancellationToken cancellationToken)
     {
         var email = Email.Create(command.Email);
-        var user = await userRepository.GetByEmail(email);
+        var user = await userRepository.GetByEmail(email, cancellationToken);
 
         if (user == null)
             return new LoginUserResponse(null, "Пользователь по данному email не зарегистрирован.");
@@ -50,7 +50,7 @@ public class AuthService(
         if (passwordHasher.Verify(command.Password, user.PasswordHash) == false)
             return new LoginUserResponse(null, "Неверный пароль.");
 
-        var role = await rolesRepository.GetByIdAsync(user.RoleId);
+        var role = await rolesRepository.GetByIdAsync(user.RoleId, cancellationToken);
 
         var token = jwtTokenGenerator.Generate(new UserJwtPayload
         {
