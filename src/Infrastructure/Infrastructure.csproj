@@ -5,6 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>School.Infrastructure</RootNamespace>
+        <Configurations>Debug;Release;Test</Configurations>
     </PropertyGroup>
 
     <ItemGroup>

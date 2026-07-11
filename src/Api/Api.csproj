@@ -6,6 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>School.Api</RootNamespace>
       <UserSecretsId>a5deca41-ccba-4e0b-b5c2-c2b6d3a81e43</UserSecretsId>
+      <Configurations>Debug;Release;Test</Configurations>
   </PropertyGroup>
 
     <ItemGroup>
