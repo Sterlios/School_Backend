@@ -20,7 +20,14 @@ public class UserService(
 
         var roles = await rolesRepository.GetAllByIdsAsync(roleIds);
 
-        return users.Select(u => new GetUserResponse(u.Id.Value, string.Join(" ", u.Name.FirstName, u.Name.LastName), u.Email.Value, roles.FirstOrDefault(r => r.Id == u.RoleId)?.Name ?? "Unknown", u.Status.ToString())).ToList();
+        return users
+            .Select(u => new GetUserResponse(
+                Id: u.Id.Value,
+                Name: string.Join(" ", u.Name.FirstName, u.Name.LastName),
+                Email: u.Email.Value,
+                Role: roles.FirstOrDefault(r => r.Id.Equals(u.RoleId))?.Name ?? "Unknown",
+                Status: u.Status.ToString()))
+            .ToList();
     }
 
     public async Task<GetUserResponse> GetUser(GetUserRequest getUserQuery, CancellationToken ct)
@@ -34,7 +41,12 @@ public class UserService(
             throw new Exception($"User with id {getUserQuery.Id} not found.");
         }
 
-        return new GetUserResponse(user.Id.Value, string.Join(" ", user.Name.FirstName, user.Name.LastName), user.Email.Value, role?.Name ?? "Unknown", user.Status.ToString());
+        return new GetUserResponse(
+            Id: user.Id.Value,
+            Name: string.Join(" ", user.Name.FirstName, user.Name.LastName),
+            Email: user.Email.Value,
+            Role: role?.Name ?? "Unknown",
+            Status: user.Status.ToString());
     }
 
     public async Task BlockUser(BlockUserRequest blockUserQuery, CancellationToken ct)

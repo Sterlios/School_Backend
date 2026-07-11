@@ -1,4 +1,4 @@
-﻿namespace School.Domain.Users;
+﻿namespace School.Domain.Users.Roles;
 
 public class Permission
 {

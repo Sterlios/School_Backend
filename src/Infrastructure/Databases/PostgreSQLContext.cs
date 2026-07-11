@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using School.Application.Interfaces;
 using School.Domain.Users;
+using School.Domain.Users.Roles;
 using School.Infrastructure.Databases.Configurations;
 
 namespace School.Infrastructure.Databases;

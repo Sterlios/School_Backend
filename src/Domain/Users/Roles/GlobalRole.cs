@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace School.Domain.Users;
+namespace School.Domain.Users.Roles;
 
 /// <summary>
 /// Роль пользователя в системе, определяющая его права доступа и разрешения к целой платформе.
 /// </summary>
 public class GlobalRole
 {
-    public int Id { get; }
+    public GlobalRoleId Id { get; }
     public string Name { get; }
     public bool IsDefault { get; } = false;
 

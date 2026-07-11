@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using School.Domain.Users;
+using School.Domain.Users.Roles;
 
 namespace School.Infrastructure.Databases.Configurations;
 

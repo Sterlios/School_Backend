@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using School.Application.Authorization;
-using School.Domain.Users;
+using School.Domain.Users.Roles;
 using System.Security.Claims;
 
 namespace School.Api.Controllers;
