@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using School.Domain.Users;
+using School.Domain.Users.Roles;
 
 namespace School.Domain.Tests.Users;
 
@@ -17,7 +18,7 @@ public class UserTests
     [Fact]
     public void Register_Should_Throw_When_NameIsNull()
     {
-        Action act = () => User.Register(null!, Email.Create("Anton@gmail.com"), "password", 1);
+        Action act = () => User.Register(null!, Email.Create("Anton@gmail.com"), "password", new GlobalRoleId(1));
 
         act.Should().Throw();
     }
@@ -25,7 +26,7 @@ public class UserTests
     [Fact]
     public void Register_Should_Throw_When_EmailIsNull()
     {
-        Action act = () => User.Register(FullName.Create("Anton", "Kuzmin"), null, "password", 1);
+        Action act = () => User.Register(FullName.Create("Anton", "Kuzmin"), null, "password", new GlobalRoleId(1));
 
         act.Should().Throw();
     }
@@ -36,7 +37,7 @@ public class UserTests
     [InlineData("   ")]
     public void Register_Should_Throw_When_PasswordIsNullOrEmptyOrWhiteSpace(string password)
     {
-        Action act = () => User.Register(FullName.Create("Anton", "Kuzmin"), Email.Create("Anton@gmail.com"), password, 1);
+        Action act = () => User.Register(FullName.Create("Anton", "Kuzmin"), Email.Create("Anton@gmail.com"), password, new GlobalRoleId(1));
 
         act.Should().Throw();
     }
@@ -90,9 +91,9 @@ public class UserTests
     {
         var user = Create();
 
-        user.ChangeRole(2);
+        user.ChangeRole(new GlobalRoleId(2));
 
-        user.RoleId.Should().Be(2);
+        user.RoleId.Should().Be(new GlobalRoleId(2));
     }
 
     [Fact]
@@ -100,7 +101,7 @@ public class UserTests
     {
         var user = Create();
 
-        Action act = () => user.ChangeRole(1);
+        Action act = () => user.ChangeRole(new GlobalRoleId(1));
 
         act.Should().Throw();
     }
@@ -143,6 +144,6 @@ public class UserTests
         var name = FullName.Create("Anton", "Kuzmin");
         var email = Email.Create("Anton@gmail.com");
 
-        return User.Register(name, email, "password", 1);
+        return User.Register(name, email, "password", new GlobalRoleId(1));
     }
 }
