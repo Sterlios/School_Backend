@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using School.Application.Users;
-using School.Application.Users.Queries;
 using School.Application.Users.Requests;
 using School.Application.Users.Responses;
 
