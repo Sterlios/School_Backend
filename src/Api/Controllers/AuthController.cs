@@ -13,17 +13,17 @@ public class AuthController(AuthService authService): ControllerBase
 {
     [HttpPost("register")]
     [AllowAnonymous]
-    public async Task<IActionResult> RegisterUser([FromBody] RegisterUserRequest command, CancellationToken ct)
+    public async Task<IActionResult> RegisterUser([FromBody] RegisterUserRequest registerUserRequest, CancellationToken cancellationToken)
     {
-        var user = await authService.Register(command, ct);
-        return CreatedAtAction("GetUser", new { id = user.UserId.Value }, user);
+        var user = await authService.Register(registerUserRequest, cancellationToken);
+        return CreatedAtAction(null, new { id = user.UserId.Value }, user);
     }
 
     [HttpPost("login")]
     [AllowAnonymous]
-    public async Task<ActionResult<LoginUserResponse?>> Login([FromBody] LoginUserRequest loginUserCommand, [FromServices] IJwtTokenGenerator jwtTokenGenerator, CancellationToken ct)
+    public async Task<ActionResult<LoginUserResponse?>> Login([FromBody] LoginUserRequest loginUserRequest, [FromServices] IJwtTokenGenerator jwtTokenGenerator, CancellationToken cancellationToken)
     {
-        var user = await authService.Login(loginUserCommand, jwtTokenGenerator, ct);
+        var user = await authService.Login(loginUserRequest, jwtTokenGenerator, cancellationToken);
 
         if (user is null)
             return NotFound();

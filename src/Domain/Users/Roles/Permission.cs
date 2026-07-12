@@ -2,6 +2,6 @@
 
 public class Permission
 {
-    public int Id { get; }
+    public PermissionId Id { get; }
     public string Name { get; }
 }

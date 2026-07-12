@@ -13,9 +13,9 @@ public class UsersController(UserService userService): ControllerBase
 
     [HttpGet("{id}")]
     [Authorize]
-    public async Task<ActionResult<GetUserResponse?>> GetUser(Guid id, CancellationToken ct)
+    public async Task<ActionResult<GetUserResponse?>> GetUser(Guid id, CancellationToken cancellationToken)
     {
-        var user = await userService.GetUser(new GetUserRequest(id), ct);
+        var user = await userService.GetUser(new GetUserRequest(id), cancellationToken);
 
         if (user is null)
             return NotFound();
@@ -24,27 +24,27 @@ public class UsersController(UserService userService): ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<GetUserResponse>>> GetUsers([FromQuery] FilterUsersListRequest query, CancellationToken ct)
+    public async Task<ActionResult<List<GetUserResponse>>> GetUsers([FromQuery] FilterUsersListRequest filterUsersListRequest, CancellationToken cancellationToken)
     {
-        var users = await userService.GetUsersList(query, ct);
+        var users = await userService.GetUsersList(filterUsersListRequest, cancellationToken);
 
         return users;
     }
 
     [HttpPut("{id}/block")]
     [Authorize]
-    public async Task<IActionResult> BlockUser(Guid id, CancellationToken ct)
+    public async Task<IActionResult> BlockUser(Guid id, CancellationToken cancellationToken)
     {
-        await userService.BlockUser(new BlockUserRequest(id), ct);
+        await userService.BlockUser(new BlockUserRequest(id), cancellationToken);
 
         return NoContent();
     }
 
     [HttpPut("{id}/unblock")]
     [Authorize]
-    public async Task<IActionResult> UnblockUser(Guid id, CancellationToken ct)
+    public async Task<IActionResult> UnblockUser(Guid id, CancellationToken cancellationToken)
     {
-        await userService.UnblockUser(new UnblockUserRequest(id), ct);
+        await userService.UnblockUser(new UnblockUserRequest(id), cancellationToken);
 
         return NoContent();
     }

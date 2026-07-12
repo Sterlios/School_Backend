@@ -12,18 +12,18 @@ public class AuthService(
     IUnitOfWork unitOfWork
     )
 {
-    public async Task<RegisterUserResponse> Register(RegisterUserRequest command, CancellationToken cancellationToken)
+    public async Task<RegisterUserResponse> Register(RegisterUserRequest registerUserRequest, CancellationToken cancellationToken)
     {
-        if (command.Password != command.ConfirmPassword)
+        if (registerUserRequest.Password != registerUserRequest.ConfirmPassword)
             throw new ArgumentException("Passwords do not match.");
 
-        var email = Email.Create(command.Email);
+        var email = Email.Create(registerUserRequest.Email);
 
         if (await userRepository.ExistsByEmailAsync(email, cancellationToken))
             throw new ArgumentException("Email is already in use.");
 
-        var fullName = FullName.Create(command.FirstName, command.LastName);
-        var hashedPassword = passwordHasher.Hash(command.Password);
+        var fullName = FullName.Create(registerUserRequest.FirstName, registerUserRequest.LastName);
+        var hashedPassword = passwordHasher.Hash(registerUserRequest.Password);
         var role = await rolesRepository.GetDefaultAsync(cancellationToken);
 
         var user = User.Register(
@@ -39,15 +39,15 @@ public class AuthService(
         return new RegisterUserResponse(user.Id);
     }
 
-    public async Task<LoginUserResponse> Login(LoginUserRequest command, IJwtTokenGenerator jwtTokenGenerator, CancellationToken cancellationToken)
+    public async Task<LoginUserResponse> Login(LoginUserRequest loginUserRequest, IJwtTokenGenerator jwtTokenGenerator, CancellationToken cancellationToken)
     {
-        var email = Email.Create(command.Email);
+        var email = Email.Create(loginUserRequest.Email);
         var user = await userRepository.GetByEmail(email, cancellationToken);
 
         if (user == null)
             return new LoginUserResponse(null, "Пользователь по данному email не зарегистрирован.");
 
-        if (passwordHasher.Verify(command.Password, user.PasswordHash) == false)
+        if (passwordHasher.Verify(loginUserRequest.Password, user.PasswordHash) == false)
             return new LoginUserResponse(null, "Неверный пароль.");
 
         var role = await rolesRepository.GetByIdAsync(user.RoleId, cancellationToken);

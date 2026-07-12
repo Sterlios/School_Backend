@@ -14,6 +14,9 @@ public static class GlobalRolesTableConfiguration
             .HasName("PK_GlobalRoles");
 
         builder.Property(r => r.Id)
+            .HasConversion(
+               id => id.Id,
+                value => new GlobalRoleId(value))
             .HasIdentityOptions(1, 1);
 
         builder.Property(r => r.Name)
@@ -23,5 +26,8 @@ public static class GlobalRolesTableConfiguration
         builder.Property(r => r.IsDefault)
             .IsRequired()
             .HasDefaultValue(false);
+
+        builder.HasMany(x => x.Permissions)
+            .WithMany();
     }
 }

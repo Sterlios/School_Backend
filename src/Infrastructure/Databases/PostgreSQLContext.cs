@@ -8,12 +8,11 @@ namespace School.Infrastructure.Databases;
 
 public class PostgreSQLContext: DbContext, IUnitOfWork
 {
-    public PostgreSQLContext(DbContextOptions options) : base(options)
-    {
-    }
+    public PostgreSQLContext(DbContextOptions options) : base(options) { }
 
     public DbSet<User> Users { get; set; }
     public DbSet<GlobalRole> GlobalRoles { get; set; }
+    public DbSet<Permission> Permissions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -21,5 +20,6 @@ public class PostgreSQLContext: DbContext, IUnitOfWork
 
         modelBuilder.Entity<User>(builder => builder.Configure());
         modelBuilder.Entity<GlobalRole>(builder => builder.Configure());
+        modelBuilder.Entity<Permission>(builder => builder.Configure());
     }
 }

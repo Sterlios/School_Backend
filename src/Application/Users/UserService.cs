@@ -7,11 +7,12 @@ namespace School.Application.Users;
 
 public class UserService(
     IUserRepository userRepository,
-    IRolesRepository rolesRepository)
+    IRolesRepository rolesRepository,
+    IUnitOfWork unitOfWork)
 {
-    public async Task<List<GetUserResponse>> GetUsersList(FilterUsersListRequest filterUsersListQuery, CancellationToken ct)
+    public async Task<List<GetUserResponse>> GetUsersList(FilterUsersListRequest filterUsersListRequest, CancellationToken cancellationToken)
     {
-        var users = await userRepository.GetUsersAsync(filterUsersListQuery, ct);
+        var users = await userRepository.GetUsersAsync(filterUsersListRequest, cancellationToken);
 
         var roleIds = users
             .Select(u => u.RoleId)
@@ -30,15 +31,15 @@ public class UserService(
             .ToList();
     }
 
-    public async Task<GetUserResponse> GetUser(GetUserRequest getUserQuery, CancellationToken ct)
+    public async Task<GetUserResponse> GetUser(GetUserRequest getUserRequest, CancellationToken cancellationToken)
     {
-        var user = await userRepository.GetByIdAsync(new UserId(getUserQuery.Id), ct);
+        var user = await userRepository.GetByIdAsync(new UserId(getUserRequest.Id), cancellationToken);
 
-        var role = await rolesRepository.GetByIdAsync(user.RoleId, ct);
+        var role = await rolesRepository.GetByIdAsync(user.RoleId, cancellationToken);
 
         if (user is null)
         {
-            throw new Exception($"User with id {getUserQuery.Id} not found.");
+            throw new Exception($"User with id {getUserRequest.Id} not found.");
         }
 
         return new GetUserResponse(
@@ -49,23 +50,27 @@ public class UserService(
             Status: user.Status.ToString());
     }
 
-    public async Task BlockUser(BlockUserRequest blockUserQuery, CancellationToken ct)
+    public async Task BlockUser(BlockUserRequest blockUserRequest, CancellationToken cancellationToken)
     {
-        var user = await userRepository.GetByIdAsync(new UserId(blockUserQuery.Id), ct);
+        var user = await userRepository.GetByIdAsync(new UserId(blockUserRequest.Id), cancellationToken);
 
         if (user is null)
-            throw new Exception($"User with id {blockUserQuery.Id} not found.");
+            throw new Exception($"User with id {blockUserRequest.Id} not found.");
 
         user.Block();
+
+        await unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task UnblockUser(UnblockUserRequest unblockUserQuery, CancellationToken ct)
+    public async Task UnblockUser(UnblockUserRequest unblockUserRequest, CancellationToken cancellationToken)
     {
-        var user = await userRepository.GetByIdAsync(new UserId(unblockUserQuery.id), ct);
+        var user = await userRepository.GetByIdAsync(new UserId(unblockUserRequest.id), cancellationToken);
 
         if (user is null)
-            throw new Exception($"User with id {unblockUserQuery.id} not found.");
+            throw new Exception($"User with id {unblockUserRequest.id} not found.");
 
         user.Unblock();
+
+        await unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }
