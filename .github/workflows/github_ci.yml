@@ -21,7 +21,9 @@ jobs:
           dotnet-version: "10.0.x"
 
       - name: Restore
-        run: dotnet restore School_Backend.slnx
+        run: dotnet restore School_Backend.slnx 
+          dotnet restore tests/Domain.Tests/Domain.Tests.csproj
+          dotnet restore tests/Application.Tests/Application.Tests.csproj
 
       - name: Build
         run: dotnet build School_Backend.slnx --configuration Release --no-restore
