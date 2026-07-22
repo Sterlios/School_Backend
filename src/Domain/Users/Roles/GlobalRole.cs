@@ -5,9 +5,9 @@
 /// </summary>
 public class GlobalRole
 {
-    public GlobalRoleId Id { get; }
-    public string Name { get; }
-    public bool IsDefault { get; } = false;
+    public GlobalRoleId Id { get; init; }
+    public string Name { get; init; }
+    public bool IsDefault { get; init; } = false;
 
     public List<Permission> Permissions { get; } = new List<Permission>();
 }

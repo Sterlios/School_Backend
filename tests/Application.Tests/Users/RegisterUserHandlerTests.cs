@@ -4,6 +4,7 @@ using School.Application.Authorization;
 using School.Application.Authorization.Requests;
 using School.Application.Interfaces;
 using School.Domain.Users;
+using School.Domain.Users.Roles;
 
 namespace School.Application.Tests.Users;
 
@@ -20,6 +21,15 @@ public class RegisterUserHandlerTests
         repository
             .Setup(x => x.ExistsByEmailAsync(It.IsAny<Email>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(false);
+
+        rolesRepository
+            .Setup(x => x.GetDefaultAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new GlobalRole()
+            {
+                Id = new GlobalRoleId(1),
+                Name = "User",
+                IsDefault = true
+            });
 
         passwordHasher
             .Setup(x => x.Hash(It.IsAny<string>()))
