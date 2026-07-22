@@ -32,7 +32,7 @@ public class UsersController(UserService userService): ControllerBase
     }
 
     [HttpPut("{id}/block")]
-    [Authorize]
+    [Authorize()]
     public async Task<IActionResult> BlockUser(Guid id, CancellationToken cancellationToken)
     {
         await userService.BlockUser(new BlockUserRequest(id), cancellationToken);

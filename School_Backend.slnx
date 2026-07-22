@@ -30,4 +30,8 @@
       <Build Solution="Debug|*" Project="false" />
     </Project>
   </Folder>
+  <Project Path="docker-compose.dcproj">
+    <BuildType Solution="Test|*" Project="Release" />
+    <Build />
+  </Project>
 </Solution>

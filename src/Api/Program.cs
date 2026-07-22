@@ -7,22 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.AddApplication();
 builder.AddInfrastructure();
-builder.Services.AddAuthorization();
-//options =>
-//{
-//    options.AddPolicy(Policies.Admin, policy =>
-//    {
-//        policy.RequireRole(Policies.Admin);
-//        policy.RequireClaim("permissions", Policies.AdminPermissions);
-//    });
-//    options.AddPolicy(Policies.User, policy =>
-//    {
-//        policy.RequireRole(Policies.User);
-//        policy.RequireClaim("permissions", Policies.UserPermissions);
-//    });
-//});
+//builder.Services.AddPermissionsProvider();
 
-if (!builder.Environment.IsEnvironment("master"))
+if (!builder.Environment.IsProduction())
 {
     builder.Services.AddSwaggerGen(c =>
     {
@@ -49,20 +36,19 @@ if (!builder.Environment.IsEnvironment("master"))
     });
 }
 
-if (builder.Environment.IsEnvironment("local"))
+if (builder.Environment.IsEnvironment("Local"))
 {
     builder.Configuration.AddUserSecrets<Program>();
 }
 
 var app = builder.Build();
 
-if (!builder.Environment.IsEnvironment("master"))
+if (!app.Environment.IsProduction())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseAuthentication();

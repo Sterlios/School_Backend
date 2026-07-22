@@ -19,4 +19,13 @@ public class RolesRepository(PostgreSQLContext context): IRolesRepository
         await context.GlobalRoles
             .FirstOrDefaultAsync(r => r.IsDefault, cancellationToken)
             ?? await context.GlobalRoles.FirstAsync(cancellationToken);
+
+    public Task<List<Permission>> GetPermissionsForRole(string roleName)
+    {
+        var role = context.GlobalRoles
+            .Include(r => r.Permissions)
+            .FirstOrDefault(r => r.Name == roleName);
+
+        return Task.FromResult(role?.Permissions ?? new List<Permission>());
+    }
 }

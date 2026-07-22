@@ -15,7 +15,6 @@ public class RegisterUserHandlerTests
         var repository = new Mock<IUserRepository>();
         var unitOfWork = new Mock<IUnitOfWork>();
         var passwordHasher = new Mock<IPasswordHasher>();
-        var jwtTokenGenerator = new Mock<IJwtTokenGenerator>();
         var rolesRepository = new Mock<IRolesRepository>();
 
         repository
@@ -25,10 +24,6 @@ public class RegisterUserHandlerTests
         passwordHasher
             .Setup(x => x.Hash(It.IsAny<string>()))
             .Returns("hash");
-
-        jwtTokenGenerator
-            .Setup(x => x.Generate(It.IsAny<UserJwtPayload>()))
-            .Returns("token");
 
         var authService = new AuthService(repository.Object, rolesRepository.Object, passwordHasher.Object, unitOfWork.Object);
 

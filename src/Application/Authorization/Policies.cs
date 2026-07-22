@@ -1,5 +1,0 @@
-﻿namespace School.Application.Authorization;
-
-public class Policies
-{
-}
