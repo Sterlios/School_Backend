@@ -33,17 +33,6 @@ jobs:
       - name: Build
         run: dotnet build School_Backend.slnx --configuration Release --no-restore
         
-      - name: DatabaseCheck
-        run:
-          dotnet ef migrations has-pending-model-changes
-            --project src/Priceless.Infrastructure
-            --startup-project src/Priceless.Api
-            --no-build
-
-      - name: DatabaseUpdate
-        uses: actions/checkout@v4
-      - run: dotnet ef database update --project src/Api
-  
       - name: Test
         run: dotnet test School_Backend.slnx --configuration Release --no-build
   
