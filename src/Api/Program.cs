@@ -7,7 +7,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.AddApplication();
 builder.AddInfrastructure();
-//builder.Services.AddPermissionsProvider();
 
 if (!builder.Environment.IsProduction())
 {
