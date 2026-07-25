@@ -6,16 +6,20 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>School.Api</RootNamespace>
       <UserSecretsId>a5deca41-ccba-4e0b-b5c2-c2b6d3a81e43</UserSecretsId>
+      <Configurations>Debug;Release;Test</Configurations>
+      <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+      <DockerfileContext>..\..</DockerfileContext>
+      <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.7" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.9">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="10.2.1" />
-        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.2.1" />
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="10.2.3" />
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.2.3" />
     </ItemGroup>
 
     <ItemGroup>

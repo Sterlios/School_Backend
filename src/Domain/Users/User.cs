@@ -1,32 +1,34 @@
-﻿namespace School.Domain.Users;
+﻿using School.Domain.Users.Roles;
+
+namespace School.Domain.Users;
 
 public class User //TODO: Create Custom Exceptions for User domain
 {
-    private User(FullName name, Email email, string passwordHash)
+    private User(FullName name, Email email, string passwordHash, GlobalRoleId roleId)
     {
         Name = name;
         Email = email;
         PasswordHash = passwordHash;
-        Role = GlobalRoles.User;
+        RoleId = roleId;
         Status = UserStatuses.Active;
     }
 
-    private User() { } // For EF
+    private User() { }
 
     public UserId Id { get; }
     public FullName Name { get; private set; }
     public Email Email { get; private set; }
     public string PasswordHash { get; private set; }
-    public GlobalRoles Role { get; private set; }
+    public GlobalRoleId RoleId { get; private set; }
     public UserStatuses Status { get; private set; }
 
-    public static User Register(FullName name, Email email, string passwordHash)
+    public static User Register(FullName name, Email email, string passwordHash, GlobalRoleId roleId)
     {
         ArgumentNullException.ThrowIfNull(name, nameof(name));
         ArgumentNullException.ThrowIfNull(email, nameof(email));
         ArgumentException.ThrowIfNullOrWhiteSpace(passwordHash, nameof(passwordHash));
 
-        return new User(name, email, passwordHash);
+        return new User(name, email, passwordHash, roleId);
     }
 
     public void Block()
@@ -45,12 +47,12 @@ public class User //TODO: Create Custom Exceptions for User domain
         Status = UserStatuses.Active;
     }
 
-    public void ChangeRole(GlobalRoles newRole)
+    public void ChangeRole(GlobalRoleId roleId)
     {
-        if (Role == newRole)
+        if (RoleId.Equals(roleId))
             throw new InvalidOperationException($"Не удалось изменить роль у пользователя.");
 
-        Role = newRole;
+        RoleId = roleId;
     }
 
     public void ChangePassword(string passwordHash)

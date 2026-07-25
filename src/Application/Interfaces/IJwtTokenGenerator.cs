@@ -1,8 +1,8 @@
-﻿using School.Domain.Users;
+﻿using School.Application.Authorization;
 
 namespace School.Application.Interfaces;
 
 public interface IJwtTokenGenerator
 {
-    string Generate(User user);
+    string Generate(UserJwtPayload user);
 }

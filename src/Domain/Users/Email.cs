@@ -3,12 +3,10 @@ using System.Text.RegularExpressions;
 
 namespace School.Domain.Users;
 
-public class Email
+public record Email
 {
-    private Email(string value)
-    {
+    private Email(string value) =>
         Value = value;
-    }
 
     private Email() { } // For EF Core
 
@@ -32,21 +30,5 @@ public class Email
         return Regex.IsMatch(
             value,
             @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
-    }
-
-    public bool Equals(Email? other)
-    {
-        return other is not null &&
-               Value == other.Value;
-    }
-
-    public override bool Equals(object? obj)
-    {
-        return Equals(obj as Email);
-    }
-
-    public override int GetHashCode()
-    {
-        return Value.GetHashCode();
     }
 }

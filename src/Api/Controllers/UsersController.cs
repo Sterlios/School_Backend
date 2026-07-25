@@ -1,30 +1,51 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using School.Application.Users.GetUser;
-using School.Application.Users.RegisterUser;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using School.Application.Users;
+using School.Application.Users.Requests;
+using School.Application.Users.Responses;
 
 namespace School.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UsersController(
-    RegisterUserCommandHandler registerUserCommandHandler,
-    GetUserQueryHandler getUserHandler): ControllerBase
+public class UsersController(UserService userService): ControllerBase
 {
-    [HttpPost]
-    public async Task<IActionResult> RegisterUser([FromBody] RegisterUserCommand command, CancellationToken ct)
-    {
-        var user = await registerUserCommandHandler.Handle(command, ct);
-        return CreatedAtAction(nameof(GetUser), new { id = user.UserId.Value }, user);
-    }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<GetUserResponse?>> GetUser(Guid id, CancellationToken ct)
+    [Authorize]
+    public async Task<ActionResult<GetUserResponse?>> GetUser(Guid id, CancellationToken cancellationToken)
     {
-        var user = await getUserHandler.Handle(new GetUserQuery(id), ct);
+        var user = await userService.GetUser(new GetUserRequest(id), cancellationToken);
 
         if (user is null)
             return NotFound();
 
         return user;
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<List<GetUserResponse>>> GetUsers([FromQuery] FilterUsersListRequest filterUsersListRequest, CancellationToken cancellationToken)
+    {
+        var users = await userService.GetUsersList(filterUsersListRequest, cancellationToken);
+
+        return users;
+    }
+
+    [HttpPut("{id}/block")]
+    [Authorize()]
+    public async Task<IActionResult> BlockUser(Guid id, CancellationToken cancellationToken)
+    {
+        await userService.BlockUser(new BlockUserRequest(id), cancellationToken);
+
+        return NoContent();
+    }
+
+    [HttpPut("{id}/unblock")]
+    [Authorize]
+    public async Task<IActionResult> UnblockUser(Guid id, CancellationToken cancellationToken)
+    {
+        await userService.UnblockUser(new UnblockUserRequest(id), cancellationToken);
+
+        return NoContent();
     }
 }

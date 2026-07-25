@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using School.Application.Authorization;
 using School.Application.Interfaces;
-using School.Domain.Users;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
@@ -15,14 +17,13 @@ public class JwtTokenGenerator: IJwtTokenGenerator
         _options = options.Value;
     }
 
-    public string Generate(User user)
+    public string Generate(UserJwtPayload user)
     {
         var claims = new List<Claim>
         {
-            new(JwtRegisteredClaimNames.Sub, user.Id.Value.ToString()),
-            new(JwtRegisteredClaimNames.Email, user.Email.Value),
-
-            new(ClaimTypes.Role, user.Role.ToString())
+            new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+            new(JwtRegisteredClaimNames.Email, user.Email),
+            new(ClaimTypes.Role, user.Role)
         };
 
         var key = new SymmetricSecurityKey(

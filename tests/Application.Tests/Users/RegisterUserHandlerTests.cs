@@ -1,54 +1,67 @@
 ﻿using FluentAssertions;
 using Moq;
+using School.Application.Authorization;
+using School.Application.Authorization.Requests;
 using School.Application.Interfaces;
-using School.Application.Users.RegisterUser;
 using School.Domain.Users;
+using School.Domain.Users.Roles;
 
 namespace School.Application.Tests.Users;
 
 public class RegisterUserHandlerTests
 {
     [Fact]
-    public async Task Handle_Should_RegisterUser_When_EmailIsFree()
+    public async Task Register_Should_RegisterUser_When_EmailIsFree()
     {
         var repository = new Mock<IUserRepository>();
         var unitOfWork = new Mock<IUnitOfWork>();
         var passwordHasher = new Mock<IPasswordHasher>();
+        var rolesRepository = new Mock<IRolesRepository>();
 
         repository
             .Setup(x => x.ExistsByEmailAsync(It.IsAny<Email>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(false);
 
+        rolesRepository
+            .Setup(x => x.GetDefaultAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new GlobalRole()
+            {
+                Id = new GlobalRoleId(1),
+                Name = "User",
+                IsDefault = true
+            });
+
         passwordHasher
             .Setup(x => x.Hash(It.IsAny<string>()))
             .Returns("hash");
 
-        var handler = new RegisterUserCommandHandler(repository.Object, passwordHasher.Object, unitOfWork.Object);
+        var authService = new AuthService(repository.Object, rolesRepository.Object, passwordHasher.Object, unitOfWork.Object);
 
-        var command = new RegisterUserCommand()
-        {
-            FirstName = "Anton",
-            LastName = "Kuzmin",
-            Email = "anton@gmail.com",
-            Password = "password",
-            ConfirmPassword = "password"
-        };
+        var command = new RegisterUserRequest(
+            "Anton",
+            "Kuzmin",
+            "anton@gmail.com",
+            "password",
+            "password"
+        );
 
-        var result = await handler.Handle(command, CancellationToken.None);
+        var result = await authService.Register(command, It.IsAny<CancellationToken>());
 
         result.Should().NotBeNull();
 
         repository.Verify(
-            x => x.AddAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()),
+            x => x.Add(It.IsAny<User>()),
             Times.Once);
     }
 
     [Fact]
-    public async Task Handle_Should_Throw_When_EmailExists()
+    public async Task Register_Should_Throw_When_EmailExists()
     {
         var repository = new Mock<IUserRepository>();
+        var rolesRepository = new Mock<IRolesRepository>();
         var passwordHasher = new Mock<IPasswordHasher>();
         var unitOfWork = new Mock<IUnitOfWork>();
+        var jwtTokenGenerator = new Mock<IJwtTokenGenerator>();
 
         repository
             .Setup(x => x.ExistsByEmailAsync(It.IsAny<Email>(), It.IsAny<CancellationToken>()))
@@ -58,19 +71,22 @@ public class RegisterUserHandlerTests
             .Setup(x => x.Hash(It.IsAny<string>()))
             .Returns("hash");
 
-        var handler = new RegisterUserCommandHandler(repository.Object, passwordHasher.Object, unitOfWork.Object);
+        jwtTokenGenerator
+            .Setup(x => x.Generate(It.IsAny<UserJwtPayload>()))
+            .Returns("token");
 
-        var command = new RegisterUserCommand()
-        {
-            FirstName = "Anton",
-            LastName = "Kuzmin",
-            Email = "anton@gmail.com",
-            Password = "password",
-            ConfirmPassword = "password"
-        };
+        var authService = new AuthService(repository.Object, rolesRepository.Object, passwordHasher.Object, unitOfWork.Object);
 
-        var act = () => handler.Handle(command, CancellationToken.None);
+        var command = new RegisterUserRequest(
+            "Anton",
+            "Kuzmin",
+            "anton@gmail.com",
+            "password",
+            "password"
+        );
 
-        await act.Should().ThrowAsync();
+        var act = () => authService.Register(command, CancellationToken.None);
+
+        await act.Should().ThrowAsync<ArgumentException>();
     }
 }
