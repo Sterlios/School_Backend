@@ -33,7 +33,7 @@ public class AuthService(
             role.Id
         );
 
-        await userRepository.AddAsync(user, cancellationToken);
+        userRepository.AddAsync(user);
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
         return new RegisterUserResponse(user.Id);

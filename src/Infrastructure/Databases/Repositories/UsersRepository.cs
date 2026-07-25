@@ -7,8 +7,8 @@ namespace School.Infrastructure.Databases.Repositories;
 
 public class UsersRepository(PostgreSQLContext context): IUserRepository
 {
-    public async Task AddAsync(User user, CancellationToken cancellationToken = default) =>
-        await context.AddAsync(user, cancellationToken);
+    public void AddAsync(User user) =>
+        context.Add(user);
 
     public async Task<bool> ExistsByEmailAsync(Email email, CancellationToken cancellationToken = default) =>
         await context.Users.AnyAsync(u => u.Email == email, cancellationToken);
