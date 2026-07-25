@@ -50,7 +50,7 @@ public class RegisterUserHandlerTests
         result.Should().NotBeNull();
 
         repository.Verify(
-            x => x.AddAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()),
+            x => x.Add(It.IsAny<User>()),
             Times.Once);
     }
 
