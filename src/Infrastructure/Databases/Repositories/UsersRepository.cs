@@ -7,7 +7,7 @@ namespace School.Infrastructure.Databases.Repositories;
 
 public class UsersRepository(PostgreSQLContext context): IUserRepository
 {
-    public void AddAsync(User user) =>
+    public void Add(User user) =>
         context.Add(user);
 
     public async Task<bool> ExistsByEmailAsync(Email email, CancellationToken cancellationToken = default) =>
