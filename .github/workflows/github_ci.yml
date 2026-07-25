@@ -2,6 +2,10 @@
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
 name: github_ci
+env:
+  DOCKER_DRIVER: overlay2
+  IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+  GITLAB_USER: oauth2
 
 on:
   push:
@@ -19,15 +23,27 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "10.0.x"
-
+          
       - name: Restore 
         uses: actions/checkout@v4
       - run: dotnet restore School_Backend.slnx 
       - run: dotnet restore tests/Domain.Tests/Domain.Tests.csproj
       - run: dotnet restore tests/Application.Tests/Application.Tests.csproj
-
+      
       - name: Build
         run: dotnet build School_Backend.slnx --configuration Release --no-restore
+        
+      - name: DatabaseCheck
+        run:
+          dotnet ef migrations has-pending-model-changes
+            --project src/Priceless.Infrastructure
+            --startup-project src/Priceless.Api
+            --no-build
 
+      - name: DatabaseUpdate
+        uses: actions/checkout@v4
+      - run: dotnet ef database update --project src/Api
+  
       - name: Test
         run: dotnet test School_Backend.slnx --configuration Release --no-build
+  
